@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "stable"
+script:
+  - echo "Good to go!"
 cache:
   directories:
     - "node_modules"

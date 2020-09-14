@@ -1,4 +1,5 @@
 # carl-app
+[![Build Status](https://travis-ci.com/eurekesh/carl-app.svg?token=uVx9g6AFpDqeE9V4y2JS&branch=master)](https://travis-ci.com/eurekesh/carl-app)
 ### Installation Instructions
 --------------------
 Step 1. Clone this repo (e.g. `git clone`)  

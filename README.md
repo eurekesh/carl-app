@@ -6,7 +6,7 @@ Step 1. Clone this repo (e.g. `git clone`)
 
 Step 2. Run `npm install` to get all of the dependencies.  
 
-Step 3. Profit (run `node app.js` to run!)
+Step 3. Profit (run `node app.js` to run and then navigate to `localhost:3000` in your browser!)
 
 ### Running locally
 --------------------

@@ -6,7 +6,7 @@ app.use(express.static("public"))
 
 // define the first route
 app.get("/", function (req, res) {
-  res.send("<h1>We are C.Ar.L</h1>")
+  res.sendFile(__dirname +'/public/about-me-pages/about-us.html')
 })
 
 // start the server listening for requests

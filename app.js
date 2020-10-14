@@ -15,22 +15,13 @@ app.use('/',function(req, res, next){
 
 //dynamic routes go here
 
-<<<<<<< Updated upstream
-// use the express-static middleware
-app.use(express.static("public/about-me-pages"))
-=======
+
 app.use(express.static("public"))
->>>>>>> Stashed changes
 
 app.get("/", function (req, res) {
-<<<<<<< Updated upstream
-  res.sendFile(__dirname +'/public/about-me-pages/about-us.html')
-})
-=======
   //res.sendFile(__dirname +'/public/about-me-pages/about-us.html')
   res.sendFile("index.html");
 });
->>>>>>> Stashed changes
 
 io.on('connection', (socket) => {
   console.log('user connected');

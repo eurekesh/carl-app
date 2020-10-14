@@ -19,8 +19,8 @@ document.addEventListener('mouseenter', setPosition);
 
 // new position from mouse event
 function setPosition(e) {
-  pos.x = e.clientX;
-  pos.y = e.clientY;
+  pos.x = e.clientX - canvas.offsetLeft; // thanks to alex for offsets
+  pos.y = e.clientY - canvas.offsetTop;
 }
 
 function draw(e) { // going to be used for collecting input

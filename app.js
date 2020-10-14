@@ -8,13 +8,7 @@ serv.listen(port,()=> {
   console.log('Server successfully started at port %d',port);
 });
 
-app.use('/',function(req, res, next){
-   console.log("A new request received at " + Date.now());
-   next();
-});
-
-//dynamic routes go here
-
+//dynamic routes go here, look into socket.io "rooms"
 
 app.use(express.static("public"))
 
@@ -26,7 +20,8 @@ app.get("/", function (req, res) {
 io.on('connection', (socket) => {
   console.log('user connected');
   socket.on('send data', (data) => {
-    console.log('data recieved, distributing it now.');
+    console.log('data recieved, distributing it to clients now.');
+    console.log('data contains: ' + data);
     socket.broadcast.emit('to_client',data);
   })
 })

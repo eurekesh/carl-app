@@ -3,7 +3,5 @@ body {
 }
 
 canvas {
-  height: 360px;
-  width: 360px;
   position: fixed;
 }

@@ -10,11 +10,12 @@ serv.listen(port,()=> {
 
 //dynamic routes go here, look into socket.io "rooms"
 
+app.use(express.static("public/views"))
 app.use(express.static("public"))
 
 app.get("/", function (req, res) {
   //res.sendFile(__dirname +'/public/about-me-pages/about-us.html')
-  res.sendFile("index.html");
+  res.sendFile("/public/views/instructions.html", { root: __dirname });
 });
 
 io.on('connection', (socket) => {

@@ -2,7 +2,7 @@
 /* This css was created by Bootstrap for their login page example */
 
 
-#link1 
+.link1
 {
     font-family: 'Lato', sans-serif;
     color:blue;
@@ -10,7 +10,7 @@
     margin: 7px;
 }
 
-#link2
+.link2
 {
     font-family: 'Lato', sans-serif;
     color:black;

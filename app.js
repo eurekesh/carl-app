@@ -1,14 +1,28 @@
-const express = require("express")
-const app = express()
+const express = require("express");
+const app = express();
+const serv = require('http').createServer(app);
+const io = require('socket.io')(serv);
+const port = process.env.PORT || 3000;
 
-// use the express-static middleware
-app.use(express.static("public/about-me-pages"))
+serv.listen(port,()=> {
+  console.log('Server successfully started at port %d',port);
+});
 
-// define the first route
+//dynamic routes go here, look into socket.io "rooms"
+
+app.use(express.static("public/views"))
+app.use(express.static("public"))
+
 app.get("/", function (req, res) {
-  res.sendFile(__dirname +'/public/about-me-pages/about-us.html')
-})
+  //res.sendFile(__dirname +'/public/about-me-pages/about-us.html')
+  res.sendFile("/public/views/instructions.html", { root: __dirname });
+});
 
-// start the server listening for requests
-app.listen(process.env.PORT || 3000,
-	() => console.log("Server is running..."));
+io.on('connection', (socket) => {
+  console.log('user connected');
+  socket.on('send data', (data) => {
+    console.log('data recieved, distributing it to clients now.');
+    console.log('data contains: ' + data);
+    socket.broadcast.emit('to_client',data);
+  })
+})

@@ -25,4 +25,4 @@ io.on('connection', (socket) => {
     console.log('data contains: ' + data);
     socket.broadcast.emit('to_client',data);
   })
-})
+});

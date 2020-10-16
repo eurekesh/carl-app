@@ -38,7 +38,7 @@ function draw(e) { // going to be used for collecting input
   stroke_data.push(gen_color);
   //format of stroke_data = [x1,y1,x2,y2,color];
   drawData(stroke_data);
-  recordData(stroke_data);
+  sendData(stroke_data);
 }
 
 function drawData(data){
@@ -59,7 +59,7 @@ function genColor(){ // random hex color
   return result;
 }
 
-function recordData(raw_dat){ // going to record and emit data
+function sendData(raw_dat){ // going to emit data
   socket.emit('send data',raw_dat);
   console.log(raw_dat);
   //document.getElementById('curr_url').innerHTML = data; // dev only, set

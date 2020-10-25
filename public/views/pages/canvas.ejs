@@ -1,13 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
+<%- include('../components/head') %>
     <title>Highly Experimental Test Canvas</title>
     <link rel="stylesheet" href="/res/stylesheets/canvas.css">
+<link rel="stylesheet" href="/res/stylesheets/navBar.css">
   </head>
   <body>
+  <%- include('../components/menu') %>
     <canvas id="canvas" height="700" width="700"></canvas>
-    <!-- NOTE: canvas can ONLY be modified using these height and width values. PLEASE don't try to use CSS. don't trust me?
+  <!-- NOTE: canvas can ONLY be modified using these height and width values. PLEASE don't try to use CSS. don't trust me?
                 trust the cow:
                 ____________________________________
                / please don't use css to modify the \

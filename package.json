@@ -19,6 +19,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "http-server": "^0.12.3",
+    "ejs": "^3.1.5",
+    "path": "^0.12.7",
+    "request": "^2.88.2",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {

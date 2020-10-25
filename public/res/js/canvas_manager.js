@@ -3,10 +3,10 @@
 var canvas = document.getElementById('canvas');
 var socket = io(); // connects to socket.io server
 
-var ctx = canvas.getContext('2d'); // we are using a 2d canvas
+const ctx = canvas.getContext('2d'); // we are using a 2d canvas
 
 // last known position
-var pos = { x: 0, y: 0 };
+let pos = { x: 0, y: 0 };
 
 // sets some brush variables // TODO: look into this more for game options later
 ctx.lineWidth = 5;
@@ -38,7 +38,7 @@ function draw(e) { // going to be used for collecting input
   stroke_data.push(gen_color);
   //format of stroke_data = [x1,y1,x2,y2,color];
   drawData(stroke_data);
-  recordData(stroke_data);
+  sendData(stroke_data);
 }
 
 function drawData(data){
@@ -55,11 +55,10 @@ function drawData(data){
 }
 
 function genColor(){ // random hex color
-  var result = "#" + Math.floor(Math.random()*16777215).toString(16);
-  return result;
+  return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 
-function recordData(raw_dat){ // going to record and emit data
+function sendData(raw_dat){ // going to emit data
   socket.emit('send data',raw_dat);
   console.log(raw_dat);
   //document.getElementById('curr_url').innerHTML = data; // dev only, set

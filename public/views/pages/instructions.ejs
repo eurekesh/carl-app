@@ -1,0 +1,21 @@
+<%- include('../components/head') %>
+            <title>Instructions</title>
+      <link href="/res/stylesheets/navBar.css" rel="stylesheet">
+  </head>
+    <body>
+    <%- include('../components/menu') %>
+
+          <div class="container">
+              <a href="http://www.youtube.com">
+                  <img id="instrGif" alt="instructionalGif" src="instructionalGif.png">
+              </a>
+              <p>Click the following link to access an experimental demo <a href="canvas.ejs">this link</a></p>
+              <form id="inputForm">
+                    <label for="w3review">TEXT BOX:</label>
+                    <textarea id="w3review" name="w3review" rows="5" cols="50">A text area that we will hopefully transition into sending images.  Also our instructions will go here
+                    </textarea>
+                  <button type="button" class="btn btn-primary" onclick="stingo(id)">Submit</button>
+              </form>
+          </div>
+    </body>
+</html>

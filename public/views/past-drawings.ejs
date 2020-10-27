@@ -1,0 +1,17 @@
+<%- include('../js/header') %>    
+      
+      <!-- insert js here to display all-->
+
+      
+					<form action="/views/past-drawings" method="get">
+						<%
+						if (data) {
+							var imgs = '';
+							data.forEach(function(item){
+								imgs += '<img src="data:image/png;base64, ' + item.img_64bitcode + ' ">';
+							}); %>
+						<% } %>
+
+
+				  </form>
+<%- include('../js/footer') %> 

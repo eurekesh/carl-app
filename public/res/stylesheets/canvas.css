@@ -1,7 +1,15 @@
 body {
   margin: 0px;
+  background: aqua;
 }
 
 canvas {
   position: fixed;
+  background:white;
+  left: 30%;
+  top: 10%;
+  user-select: none;
+}
+#room-req{
+  width: 300px;
 }

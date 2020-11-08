@@ -14,8 +14,17 @@ exports.createYggdrasil = function(io_obj,socket){
     soc.on('create game', createNewRoom);
     soc.on('req room', requestRoom);
     soc.on('send data', processData);
+    soc.on('send canvas', extractData)
+    //setInterval(updateRoomState,5000); // update the room state with a base64 png TODO: maybe just request room state from new client?
 };
-function requestRoom(id){ // client is looking for a room, let's try and find a match
+
+// function updateRoomState(){
+//     io.emit
+// }
+// function requestRoomState(){
+//
+// }
+function findRoom(id){
     let found = -1;
     for(let i = 0; i < active_rooms.length; i++) // iterate through active_rooms object
     {
@@ -24,10 +33,21 @@ function requestRoom(id){ // client is looking for a room, let's try and find a 
             break;
         }
     }
-    if (found == -1) {
+    return found;
+}
+function extractData(canvas_string){
+    console.log("great news we got a return string! first few contents are: " + canvas_string.substr(1,10));
+    return canvas_string;
+}
+function requestRoom(id){ // client is looking for a room, let's try and find a match
+    let found = findRoom(id);
+
+    if (found === -1) {
         this.emit('join failed');
-        console.log('client ' + soc.id + ' tried to join, but failed. room ' + id + ' cannot be found')
+        console.log('client ' + this.id + ' tried to join, but failed. room ' + id + ' cannot be found')
     } else {
+        io.to(id).emit('request canvas'); // BEFORE the client joins, let's request a current canvas
+        // TODO: connect extractData to then sending the string to the new client and setting the new string
         this.leaveAll(); // bug SQUASHED. without this, the "first selected room" would be the default. sad.
         this.join(active_rooms[found].id);
         active_rooms[found].num_users++; // TODO: use setInterval to clean out old rooms
@@ -43,24 +63,25 @@ function createNewRoom(){
     this.emit('create game success',
     {
         gameID: new_room.id,
-        yourSocketId: soc.id
+        yourSocketId: this.id
     });
     active_rooms.push(new_room);
     this.leaveAll();
     this.join(new_room.id);
-    console.log('new room id created: ' + new_room.id + ' for a very happy customer: ' + soc.id);
+    console.log('new room id created: ' + new_room.id + ' for a very happy customer: ' + this.id);
 
 }
+
 function processData(data){
 
-    let currentRoom = soc.rooms[Object.keys(soc.rooms)[0]]; // ugh. thanks so
+    let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
     //console.log("room target: " + currentRoom);
     io.to(currentRoom).emit('to_client',data);
 }
 
 function generateID() { // based on https://www.codegrepper.com/code-examples/delphi/how+to+generate+random+alphabet+in+javascript
     let res = "";
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let possible = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz023456789"; // I have removed i,I,l,L, and 1 because they are often confused
 
     for (let i = 0; i < 6; i++) {
         res += possible.charAt(Math.floor(Math.random() * possible.length));

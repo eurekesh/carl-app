@@ -110,3 +110,9 @@ socket.on('successful join',function(){ // successfully joined!
   document.getElementById('create-room').disabled = true;
   document.getElementById('room-submit').disabled = true;
 })
+
+socket.on('request canvas',function(){
+  console.log("a new client is joining, calculating and sending canvas state");
+  let calc_string = canvas.toDataURL();
+  socket.emit('send canvas',calc_string);
+})

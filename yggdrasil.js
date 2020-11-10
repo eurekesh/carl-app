@@ -43,7 +43,7 @@ function createNewRoom(){
     this.emit('create game success',
     {
         gameID: new_room.id,
-        yourSocketId: soc.id
+        yourSocketId: this.id
     });
     active_rooms.push(new_room);
     this.leaveAll();

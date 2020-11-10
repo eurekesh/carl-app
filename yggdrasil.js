@@ -53,7 +53,7 @@ function createNewRoom(){
 }
 function processData(data){
 
-    let currentRoom = soc.rooms[Object.keys(soc.rooms)[0]]; // ugh. thanks so
+    let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so
     //console.log("room target: " + currentRoom);
     io.to(currentRoom).emit('to_client',data);
 }

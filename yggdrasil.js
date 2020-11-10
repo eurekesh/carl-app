@@ -43,7 +43,7 @@ function createNewRoom(){
     this.emit('create game success',
     {
         gameID: new_room.id,
-        yourSocketId: soc.id
+        yourSocketId: this.id
     });
     active_rooms.push(new_room);
     this.leaveAll();
@@ -53,7 +53,7 @@ function createNewRoom(){
 }
 function processData(data){
 
-    let currentRoom = soc.rooms[Object.keys(soc.rooms)[0]]; // ugh. thanks so
+    let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so
     //console.log("room target: " + currentRoom);
     io.to(currentRoom).emit('to_client',data);
 }

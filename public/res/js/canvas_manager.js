@@ -3,6 +3,9 @@
 var canvas = document.getElementById('canvas');
 var socket = io(); // connects to socket.io server
 var roomID;
+var first_user = false;
+var req_user = false;
+
 
 var socID = document.getElementById('socketID');
 var gameID = document.getElementById('gameID');
@@ -61,12 +64,12 @@ function drawData(data){
 function genColor(){ // random hex color
   return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
-function erase(){
+function eraseCanvas(){
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 function sendData(raw_dat){ // going to emit data
   socket.emit('send data',raw_dat);
-  console.log(raw_dat);
+  // console.log(raw_dat);
   //document.getElementById('curr_url').innerHTML = data; // dev only, set
 }
 function sendRoomCreateReq(){
@@ -74,14 +77,16 @@ function sendRoomCreateReq(){
   document.getElementById('room-req').disabled = true;
   document.getElementById('room-submit').disabled = true;
   socket.emit('create game');
+  first_user = true;
 }
 function sendRoomJoinReq(){
   const getRoomID = document.getElementById('room-req').value;
   socket.emit('req room',getRoomID);
+  req_user = true;
 }
 
 socket.on('to_client',function(data) {
-  console.log('line info and color received from server')
+  // console.log('line info and color received from server')
   drawData(data);
 })
 
@@ -93,6 +98,7 @@ socket.on('create game success', function(data){ // successfully created game
   socID.innerHTML = data.yourSocketId;
   gameID.innerHTML = 'Share this code with friends: ' + data.gameID;
   roomID = data.gameID;
+  req_user = false;
 })
 
 socket.on('join failed', function(){ // server couldn't find game id, try again
@@ -100,7 +106,25 @@ socket.on('join failed', function(){ // server couldn't find game id, try again
   gameID.innerHTML = "failed :(";
 })
 
-socket.on('successful join',function(){ // successfully joined!
+socket.on('initial canvas',function(data){ // if the client is new, process the incoming data
+  if(req_user){
+    if(data==="") console.log("data was empty :(");
+    console.log(data);
+    eraseCanvas(); // new function! check above. it just wipes the canvas
+    // leftover shenanigans from SO that sets the image
+    let img = new Image;
+    img.onload = function(){
+      ctx.drawImage(img,0,0);
+    };
+    img.src = data;
+    req_user = false;
+  }
+  else{
+    console.log("new client has joined, but we do not need to update canvas")
+  }
+})
+
+socket.on('successful join',function(data){ // successfully joined!
   console.log('successfully joined a room!');
   const getRoomID = document.getElementById('room-req').value;
 
@@ -109,10 +133,16 @@ socket.on('successful join',function(){ // successfully joined!
   document.getElementById('room-req').disabled = true; // don't let them submit any more rooms
   document.getElementById('create-room').disabled = true;
   document.getElementById('room-submit').disabled = true;
+
 })
 
-socket.on('request canvas',function(){
-  console.log("a new client is joining, calculating and sending canvas state");
-  let calc_string = canvas.toDataURL();
-  socket.emit('send canvas',calc_string);
+socket.on('request canvas',function(){ // a new client is joining soon, let's send them our current canvas state
+  if(first_user) {
+    console.log("a new client is joining, calculating and sending canvas state");
+    let calc_string = canvas.toDataURL();
+    socket.emit('send canvas', calc_string);
+  }
+  else{
+    console.log("a new client is joining, but we aren't the first user so no calculations needed")
+  }
 })

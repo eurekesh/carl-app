@@ -10,15 +10,27 @@ const ctx = canvas.getContext('2d'); // we are using a 2d canvas
 
 // last known position
 let pos = { x: 0, y: 0 };
+let cursorPos = { x: 0, y: 0 };
 
 // sets some brush variables // TODO: look into this more for game options later
 ctx.lineWidth = 5;
 ctx.lineCap = 'round';
 
 // add some listeners - UPDATE: only to the canvas, stop tracking coordinates in the middle of nowhere and sending them to the server
+canvas.addEventListener('mousemove', updateCursor);
 canvas.addEventListener('mousemove', draw);
 canvas.addEventListener('mousedown', setPosition);
 canvas.addEventListener('mouseenter', setPosition);
+
+function updateCursor(e){
+  setCursorPosition(e);
+  socket.emit('send cursor', cursorPos);
+}
+
+function setCursorPosition(e){
+  cursorPos.x = e.clientX - canvas.offsetLeft;
+  cursorPos.y = e.clientY - canvas.offsetTop;
+}
 
 // new position from mouse event
 function setPosition(e) {
@@ -79,6 +91,15 @@ function sendRoomJoinReq(){
   const getRoomID = document.getElementById('room-req').value;
   socket.emit('req room',getRoomID);
 }
+
+function renderCursor(cursorData){
+  console.log("too much yeet", cursorData);
+}
+
+socket.on('cursor_to_client',function(cursorData) {
+  console.log('cursor data received from server')
+  renderCursor(cursorData);
+})
 
 socket.on('to_client',function(data) {
   console.log('line info and color received from server')

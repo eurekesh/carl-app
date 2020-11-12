@@ -15,10 +15,22 @@ exports.createYggdrasil = function(io_obj,socket){
     soc.on('req room', requestRoom);
     soc.on('send data', processData);
     soc.on('send canvas', extractData)
+
     //setInterval(updateRoomState,5000); // update the room state with a base64 png TODO: maybe just request room state from new client?
 };
 
 function findRoom(id){ // given a room id (6 chars that define the room), find it's index in active_rooms
+    soc.on('send cursor', processCursor);
+    soc.on('game start', startTimer);
+};
+
+function processCursor(cursorLocation){
+    let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so
+    console.log("Current room: ", currentRoom, "cursorLocation: ", cursorLocation);
+    io.to(currentRoom).emit('cursor_to_client', cursorLocation);
+}
+
+function requestRoom(id){ // client is looking for a room, let's try and find a match
     let found = -1;
     for(let i = 0; i < active_rooms.length; i++) // iterate through active_rooms
     {
@@ -83,4 +95,7 @@ function generateID() { // based on https://www.codegrepper.com/code-examples/de
         res += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return res;
+}
+function startTimer(){
+  console.log("does startTimer work");
 }

@@ -1,32 +1,62 @@
 // base drawing code is from stackoverflow (https://stackoverflow.com/a/30684711) which seems to be originally based on an operadev article (https://dev.opera.com/articles/html5-canvas-painting/)
 // create canvas element and append it to document body
-var canvas = document.getElementById('canvas');
+var cursorCanvas = document.getElementById('cursor-canvas');
+var drawCanvas = document.getElementById('draw-canvas');
 var socket = io(); // connects to socket.io server
 var roomID;
 var first_user = false;
 var req_user = false;
 
+var isHost = false;
 
 var socID = document.getElementById('socketID');
 var gameID = document.getElementById('gameID');
-const ctx = canvas.getContext('2d'); // we are using a 2d canvas
+const ctx = drawCanvas.getContext('2d'); // we are using a 2d canvas
+const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
+
+//timer vars
+var timeLeft = 5;
+var timer = document.getElementById('timer');
+var timerId;
+var thisCursor = document.getElementById('thisCursor');
 
 // last known position
 let pos = { x: 0, y: 0 };
+let cursorPos = { curX: 0, curY: 0, prevX: 0, prevY: 0 };
 
 // sets some brush variables // TODO: look into this more for game options later
 ctx.lineWidth = 5;
 ctx.lineCap = 'round';
 
 // add some listeners - UPDATE: only to the canvas, stop tracking coordinates in the middle of nowhere and sending them to the server
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mousedown', setPosition);
-canvas.addEventListener('mouseenter', setPosition);
+cursorCanvas.addEventListener('mousemove', updateCursor);
+cursorCanvas.addEventListener('mousedown', setPosition);
+cursorCanvas.addEventListener('mouseenter', setPosition);
+
+function updateCursor(e){
+  console.log("Cursorrrrrrr", cursorPos);
+  setCursorPosition(e);
+  socket.emit('send cursor', cursorPos);
+}
+
+function setCursorPosition(e){
+  cursorPos.curX = e.clientX - cursorCanvas.offsetLeft;
+  cursorPos.curY = e.clientY - cursorCanvas.offsetTop;
+}
+
+function renderCursor(cursorData){
+//  thisCursor.style.left = cursorPos.x + 'px';
+//  thisCursor.style.top = cursorPos.y + 'px';
+  cursorCtx.clearRect(0, 0, 700, 700);
+  cursorCtx.fillRect(cursorData.curX, cursorData.curY, 10, 10);
+  cursorPos.prevX = cursorPos.curX;
+  cursorPos.prevY = cursorPos.curY;
+}
 
 // new position from mouse event
 function setPosition(e) {
-  pos.x = e.clientX - canvas.offsetLeft; // thanks to alex for offsets
-  pos.y = e.clientY - canvas.offsetTop;
+  pos.x = e.clientX - drawCanvas.offsetLeft; // thanks to alex for offsets
+  pos.y = e.clientY - drawCanvas.offsetTop;
 }
 
 function draw(e) { // going to be used for collecting input
@@ -73,6 +103,8 @@ function sendData(raw_dat){ // going to emit data
   //document.getElementById('curr_url').innerHTML = data; // dev only, set
 }
 function sendRoomCreateReq(){
+  isHost = true;
+  document.getElementById('start-game').disabled = false;
   document.getElementById('create-room').disabled = true;
   document.getElementById('room-req').disabled = true;
   document.getElementById('room-submit').disabled = true;
@@ -84,6 +116,35 @@ function sendRoomJoinReq(){
   socket.emit('req room',getRoomID);
   req_user = true;
 }
+
+function startGame(){
+  //start timer
+  socket.emit('game start');
+  //send timer data with emit
+  console.log("game is about to YEET");
+  cursorCanvas.addEventListener('mousemove', draw);
+  timerId = setInterval(countdown, 1000);
+}
+function endGame(){
+  console.log("We're in the endgame now.");
+  cursorCanvas.removeEventListener('mousemove', draw);
+  timeLeft = 5;
+}
+function countdown() {
+  if (timeLeft == -1) {
+    clearTimeout(timerId);
+    endGame();
+  } else {
+    timer.innerHTML = timeLeft + ' seconds remaining';
+    timeLeft--;
+  }
+}
+
+socket.on('cursor_to_client',function(cursorData) {
+  console.log(cursorData);
+  console.log('cursor data received from server')
+  renderCursor(cursorData);
+})
 
 socket.on('to_client',function(data) {
   // console.log('line info and color received from server')

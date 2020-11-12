@@ -3,10 +3,13 @@
 var canvas = document.getElementById('canvas');
 var socket = io(); // connects to socket.io server
 var roomID;
+var isHost = false;
 
 var socID = document.getElementById('socketID');
 var gameID = document.getElementById('gameID');
 const ctx = canvas.getContext('2d'); // we are using a 2d canvas
+
+var thisCursor = document.getElementById('thisCursor');
 
 // last known position
 let pos = { x: 0, y: 0 };
@@ -28,8 +31,13 @@ function updateCursor(e){
 }
 
 function setCursorPosition(e){
-  cursorPos.x = e.clientX - canvas.offsetLeft;
-  cursorPos.y = e.clientY - canvas.offsetTop;
+  cursorPos.x = e.clientX;
+  cursorPos.y = e.clientY;
+}
+
+function renderCursor(cursorData){
+  thisCursor.style.left = cursorPos.x + 'px';
+  thisCursor.style.top = cursorPos.y + 'px';
 }
 
 // new position from mouse event
@@ -82,6 +90,8 @@ function sendData(raw_dat){ // going to emit data
   //document.getElementById('curr_url').innerHTML = data; // dev only, set
 }
 function sendRoomCreateReq(){
+  isHost = true;
+  document.getElementById('start-game').disabled = false;
   document.getElementById('create-room').disabled = true;
   document.getElementById('room-req').disabled = true;
   document.getElementById('room-submit').disabled = true;
@@ -92,8 +102,9 @@ function sendRoomJoinReq(){
   socket.emit('req room',getRoomID);
 }
 
-function renderCursor(cursorData){
-  console.log("too much yeet", cursorData);
+function startGame(){
+  socket.emit('game start');
+  console.log("game is about to YEET");
 }
 
 socket.on('cursor_to_client',function(cursorData) {

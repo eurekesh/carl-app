@@ -14,7 +14,14 @@ exports.createYggdrasil = function(io_obj,socket){
     soc.on('create game', createNewRoom);
     soc.on('req room', requestRoom);
     soc.on('send data', processData);
+    soc.on('send cursor', processCursor);
 };
+
+function processCursor(cursorLocation){
+    let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so
+    io.to(currentRoom).emit('cursor_to_client', cursorLocation);
+}
+
 function requestRoom(id){ // client is looking for a room, let's try and find a match
     let found = -1;
     for(let i = 0; i < active_rooms.length; i++) // iterate through active_rooms object

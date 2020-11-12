@@ -31,10 +31,9 @@ function findRoom(id){ // given a room id (6 chars that define the room), find i
 }
 function extractData(canvas_string){ // we request a canvas from the host to give to new users, here's what we do with it
     console.log("canvas string updated: " + canvas_string.substr(0,50));
-    let curr_user = new_user_queue[0]; // we select the room that was waiting for it
-    console.log(curr_user);
-    io.to(curr_user).emit('initial canvas',canvas_string); // we emit to the room that was waiting
-    new_user_queue.shift();
+    let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
+    console.log(currentRoom);
+    io.to(currentRoom).emit('initial canvas',canvas_string); // we emit to the room that was waiting
 }
 function requestRoom(id){ // client is looking for a room, let's try and find a match; this is a ROOM ID not socket id (a user)
     let found = findRoom(id);

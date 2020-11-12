@@ -1,29 +1,32 @@
 // base drawing code is from stackoverflow (https://stackoverflow.com/a/30684711) which seems to be originally based on an operadev article (https://dev.opera.com/articles/html5-canvas-painting/)
 // create canvas element and append it to document body
-var canvas = document.getElementById('canvas');
+var cursorCanvas = document.getElementById('cursor-canvas');
+var drawCanvas = document.getElementById('draw-canvas');
 var socket = io(); // connects to socket.io server
 var roomID;
 var isHost = false;
 
 var socID = document.getElementById('socketID');
 var gameID = document.getElementById('gameID');
-const ctx = canvas.getContext('2d'); // we are using a 2d canvas
+const ctx = drawCanvas.getContext('2d'); // we are using a 2d canvas
+const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
+
 
 var thisCursor = document.getElementById('thisCursor');
 
 // last known position
 let pos = { x: 0, y: 0 };
-let cursorPos = { x: 0, y: 0 };
+let cursorPos = { curX: 0, curY: 0, prevX: 0, prevY: 0 };
 
 // sets some brush variables // TODO: look into this more for game options later
 ctx.lineWidth = 5;
 ctx.lineCap = 'round';
 
 // add some listeners - UPDATE: only to the canvas, stop tracking coordinates in the middle of nowhere and sending them to the server
-canvas.addEventListener('mousemove', updateCursor);
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mousedown', setPosition);
-canvas.addEventListener('mouseenter', setPosition);
+cursorCanvas.addEventListener('mousemove', updateCursor);
+cursorCanvas.addEventListener('mousemove', draw);
+cursorCanvas.addEventListener('mousedown', setPosition);
+cursorCanvas.addEventListener('mouseenter', setPosition);
 
 function updateCursor(e){
   setCursorPosition(e);
@@ -31,19 +34,23 @@ function updateCursor(e){
 }
 
 function setCursorPosition(e){
-  cursorPos.x = e.clientX;
-  cursorPos.y = e.clientY;
+  cursorPos.curX = e.clientX;
+  cursorPos.curY = e.clientY;
 }
 
 function renderCursor(cursorData){
-  thisCursor.style.left = cursorPos.x + 'px';
-  thisCursor.style.top = cursorPos.y + 'px';
+//  thisCursor.style.left = cursorPos.x + 'px';
+//  thisCursor.style.top = cursorPos.y + 'px';
+  cursorCtx.clearRect(cursorPos.prevX - cursorCanvas.offsetLeft, cursorPos.prevY - cursorCanvas.offsetTop, 100, 100);
+  cursorCtx.fillRect(cursorPos.curX - cursorCanvas.offsetLeft, cursorPos.curY - cursorCanvas.offsetTop, 10, 10);
+  cursorPos.prevX = cursorPos.curX;
+  cursorPos.prevY = cursorPos.curY;
 }
 
 // new position from mouse event
 function setPosition(e) {
-  pos.x = e.clientX - canvas.offsetLeft; // thanks to alex for offsets
-  pos.y = e.clientY - canvas.offsetTop;
+  pos.x = e.clientX - drawCanvas.offsetLeft; // thanks to alex for offsets
+  pos.y = e.clientY - drawCanvas.offsetTop;
 }
 
 function draw(e) { // going to be used for collecting input
@@ -82,7 +89,7 @@ function genColor(){ // random hex color
   return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 function erase(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, draw-canvas.width, draw-canvas.height);
 }
 function sendData(raw_dat){ // going to emit data
   socket.emit('send data',raw_dat);

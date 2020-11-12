@@ -5,7 +5,7 @@
   </head>
   <body>
   <%- include('../components/menu') %>
-  <!-- <img id = "thisCursor" src="" alt="thisCursor"> -->   
+  <!-- <img id = "thisCursor" src="" alt="thisCursor"> -->
   <canvas id="draw-canvas" height="700" width="700"></canvas>
   <canvas id="cursor-canvas" height="700" width="700"></canvas>
   <!-- NOTE: canvas can ONLY be modified using these height and width values. PLEASE don't try to use CSS. don't trust me?
@@ -36,6 +36,7 @@
   </form>
   <button type="button" id="create-room" class="btn btn-primary" onclick="erase()">Erase Board</button>
   <button type="button" id="start-game" class="btn btn-primary" onclick="startGame()" disabled>Start Game</button>
+  <div id="timer"></div>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/res/js/canvas_manager.js" charset="utf-8"></script>
   </body>

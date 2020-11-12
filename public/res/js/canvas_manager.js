@@ -11,8 +11,11 @@ var gameID = document.getElementById('gameID');
 const ctx = drawCanvas.getContext('2d'); // we are using a 2d canvas
 const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
 
-
-//var thisCursor = document.getElementById('thisCursor');
+//timer vars
+var timeLeft = 5;
+var timer = document.getElementById('timer');
+var timerId;
+var thisCursor = document.getElementById('thisCursor');
 
 // last known position
 let pos = { x: 0, y: 0 };
@@ -24,7 +27,6 @@ ctx.lineCap = 'round';
 
 // add some listeners - UPDATE: only to the canvas, stop tracking coordinates in the middle of nowhere and sending them to the server
 cursorCanvas.addEventListener('mousemove', updateCursor);
-cursorCanvas.addEventListener('mousemove', draw);
 cursorCanvas.addEventListener('mousedown', setPosition);
 cursorCanvas.addEventListener('mouseenter', setPosition);
 
@@ -110,8 +112,26 @@ function sendRoomJoinReq(){
 }
 
 function startGame(){
+  //start timer
   socket.emit('game start');
+  //send timer data with emit
   console.log("game is about to YEET");
+  cursorCanvas.addEventListener('mousemove', draw);
+  timerId = setInterval(countdown, 1000);
+}
+function endGame(){
+  console.log("We're in the endgame now.");
+  cursorCanvas.removeEventListener('mousemove', draw);
+  timeLeft = 5;
+}
+function countdown() {
+  if (timeLeft == -1) {
+    clearTimeout(timerId);
+    endGame();
+  } else {
+    timer.innerHTML = timeLeft + ' seconds remaining';
+    timeLeft--;
+  }
 }
 
 socket.on('cursor_to_client',function(cursorData) {

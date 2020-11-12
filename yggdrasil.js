@@ -15,6 +15,7 @@ exports.createYggdrasil = function(io_obj,socket){
     soc.on('req room', requestRoom);
     soc.on('send data', processData);
     soc.on('send cursor', processCursor);
+    soc.on('game start', startTimer);
 };
 
 function processCursor(cursorLocation){
@@ -73,4 +74,7 @@ function generateID() { // based on https://www.codegrepper.com/code-examples/de
         res += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return res;
+}
+function startTimer(){
+  console.log("does startTimer work");
 }

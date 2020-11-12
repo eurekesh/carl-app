@@ -1,0 +1,49 @@
+<html>
+<!doctype html>
+<head>
+        <meta charset="utf-8">
+</head>
+
+<body>
+<p> now thats a lot of y e e e e t </p>
+<canvas id="myCanvas" width="200" height="100" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML canvas tag.</canvas>
+<button id="saveButton" type="button">Save canvas to database</button>
+<button id="drawButton" type = "button">Draw a line</button>
+
+<script>
+
+function canvas_to_base64(canvasID){
+        var canvas = document.getElementById(canvasID);
+        var dataURL = canvas.toDataURL();
+       return dataURL;
+}
+
+
+function draw_line(canvasID){
+      var c = document.getElementById(canvasID);
+      var ctx = c.getContext("2d");
+      ctx.moveTo(0,0);
+      ctx.lineTo(200,100);
+      ctx.stroke();
+}
+
+var canvas = document.getElementById("myCanvas");
+var saveButton = document.getElementById("saveButton");
+var drawButton = document.getElementById("drawButton");
+
+saveButton.addEventListener("click", function(){
+	//If this were to actually save to a database we would need to call a save_to_database function.
+	//In the current state the base64 string is logged in the console.
+	//Go ahead and check it out at https://codebeautify.org/base64-to-image-converter
+	console.log(canvas_to_base64(canvas.id));
+});
+
+drawButton.addEventListener("click", function(){
+        draw_line(canvas.id);
+});
+
+
+</script>
+</body>
+</html>

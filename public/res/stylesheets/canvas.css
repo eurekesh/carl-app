@@ -3,9 +3,14 @@ body {
   background: aqua;
 }
 
+#thisCursor {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
+
 canvas {
   position: fixed;
-  background:white;
   left: 30%;
   top: 10%;
   user-select: none;

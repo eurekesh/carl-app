@@ -23,7 +23,7 @@ app.get("/", function (req, res) {
 app.get("/res/:folder/:filen", function (req, res) { // yikes this took a long time
 //res.sendFile(__dirname +'/public/about-me-pages/about-us.ejs')
   let curr_path = path.parse(req.originalUrl);
-  console.log('req.originalURl for res is ' + req.originalUrl)
+ // console.log('req.originalURl for res is ' + req.originalUrl)
   res.sendFile(__dirname + '/public/res/' + req.params.folder + '/' + req.params.filen);
 
 });
@@ -59,8 +59,7 @@ app.get("/about-me-pages/:req_page", function (req, res) { // yikes this took a 
     res.render(req.params.req_page);
   }
 
-  console.log(req.params);
-
+ // console.log(req.params);
 });
 
 io.on('connection', (socket) => {

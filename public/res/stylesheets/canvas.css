@@ -9,12 +9,21 @@ body {
   left: 0px;
 }
 
-canvas {
+#draw-canvas{
+  background: white;
   position: fixed;
   left: 30%;
   top: 10%;
   user-select: none;
 }
+
+#cursor-canvas{
+  position: fixed;
+  left: 30%;
+  top: 10%;
+  user-select: none;
+}
+
 #room-req{
   width: 300px;
 }

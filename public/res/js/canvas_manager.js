@@ -12,7 +12,7 @@ const ctx = drawCanvas.getContext('2d'); // we are using a 2d canvas
 const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
 
 
-var thisCursor = document.getElementById('thisCursor');
+//var thisCursor = document.getElementById('thisCursor');
 
 // last known position
 let pos = { x: 0, y: 0 };
@@ -41,7 +41,7 @@ function setCursorPosition(e){
 function renderCursor(cursorData){
 //  thisCursor.style.left = cursorPos.x + 'px';
 //  thisCursor.style.top = cursorPos.y + 'px';
-  cursorCtx.clearRect(cursorPos.prevX - cursorCanvas.offsetLeft, cursorPos.prevY - cursorCanvas.offsetTop, 100, 100);
+  cursorCtx.clearRect(cursorPos.prevX - cursorCanvas.offsetLeft, cursorPos.prevY - cursorCanvas.offsetTop, 10, 10);
   cursorCtx.fillRect(cursorPos.curX - cursorCanvas.offsetLeft, cursorPos.curY - cursorCanvas.offsetTop, 10, 10);
   cursorPos.prevX = cursorPos.curX;
   cursorPos.prevY = cursorPos.curY;

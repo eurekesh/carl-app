@@ -31,20 +31,21 @@ cursorCanvas.addEventListener('mousedown', setPosition);
 cursorCanvas.addEventListener('mouseenter', setPosition);
 
 function updateCursor(e){
+  console.log("Cursorrrrrrr", cursorPos);
   setCursorPosition(e);
   socket.emit('send cursor', cursorPos);
 }
 
 function setCursorPosition(e){
-  cursorPos.curX = e.clientX;
-  cursorPos.curY = e.clientY;
+  cursorPos.curX = e.clientX - cursorCanvas.offsetLeft;
+  cursorPos.curY = e.clientY - cursorCanvas.offsetTop;
 }
 
 function renderCursor(cursorData){
 //  thisCursor.style.left = cursorPos.x + 'px';
 //  thisCursor.style.top = cursorPos.y + 'px';
-  cursorCtx.clearRect(cursorPos.prevX - cursorCanvas.offsetLeft, cursorPos.prevY - cursorCanvas.offsetTop, 10, 10);
-  cursorCtx.fillRect(cursorPos.curX - cursorCanvas.offsetLeft, cursorPos.curY - cursorCanvas.offsetTop, 10, 10);
+  cursorCtx.clearRect(0, 0, 700, 700);
+  cursorCtx.fillRect(cursorData.curX, cursorData.curY, 10, 10);
   cursorPos.prevX = cursorPos.curX;
   cursorPos.prevY = cursorPos.curY;
 }
@@ -135,6 +136,7 @@ function countdown() {
 }
 
 socket.on('cursor_to_client',function(cursorData) {
+  console.log(cursorData);
   console.log('cursor data received from server')
   renderCursor(cursorData);
 })

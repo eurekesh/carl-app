@@ -20,6 +20,7 @@ exports.createYggdrasil = function(io_obj,socket){
 
 function processCursor(cursorLocation){
     let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so
+    console.log("Current room: ", currentRoom, "cursorLocation: ", cursorLocation);
     io.to(currentRoom).emit('cursor_to_client', cursorLocation);
 }
 

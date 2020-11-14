@@ -1,44 +1,48 @@
 <%- include('../components/head') %>
-            <link href="/res/stylesheets/navBar.css" rel="stylesheet">
-            <title>Past Drawings</title>
+<link href="/res/stylesheets/navBar.css" rel="stylesheet">
+<title>Past Drawings</title>
 
-  </head>
-    <body>
+</head>
 
-        <nav class="navbar navbar-expand-sm bg-warning fixed-top">
-            <!-- Links -->
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link link1" href="instructions.ejs">
-                    Collaborative Art Live
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link link2" href="create-enter-game">Create/Enter Game</a>
-              </li>
-              <li class="nav-item">
-                  <a class="nav-link link2" href="past-drawings">Past Drawings</a>
-              </li>
-              <li class="nav-item">
-                    <a class="nav-link link2" href="../about-me-pages/about-us">About Us</a>
-              </li>
-            </ul>
-          </nav>
+<body>
 
-    </body>
+  <nav class="navbar navbar-expand-sm bg-warning fixed-top">
+    <!-- Links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link link1" href="instructions.ejs">
+          Collaborative Art Live
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link2" href="create-enter-game">Create/Enter Game</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link2" href="past-drawings">Past Drawings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link2" href="../about-me-pages/about-us">About Us</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- insert js here to display all-->
 
-     <!-- insert js here to display all-->
-    <form action="/views/past-drawings" method="get">
-      <%
-      if (data) {
-        var imgs = '';
-        data.forEach(function(item){
-          imgs += '<img src="data:image/png;base64, ' + item.img_64bitcode + ' ">';
-        }); %>
-      <% } %>
+  <div class="container">
+    <%
+            if (allcanvases) {
+              var imgs = '';
+              allcanvases.forEach(function(item){
+                var imgsrc= "data:image/png;base64," + item.img_64bitcode;
+                imgs += '<img id = "canvas_img" src="' + imgsrc + '" alt="a past canvas" />'
+              }); %>
+    <%- imgs %>
+    <% } %>
+  </div>
 
 
-      </form>
+</body>
+
+
 
 
 </html>

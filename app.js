@@ -5,9 +5,12 @@ const serv = require('http').createServer(app);
 const io = require('socket.io')(serv);
 const port = process.env.PORT || 3000;
 const yggdrasil = require('./yggdrasil');
+
 serv.listen(port,()=> {
   console.log('Server successfully started at port %d',port);
 });
+
+
 
 //dynamic routes go here, look into socket.io "rooms"
 app.set('views', [__dirname+'/public/views/pages', __dirname+'/public/views/about-me-pages']); // ejs looks for "views"
@@ -27,6 +30,85 @@ app.get("/res/:folder/:filen", function (req, res) { // yikes this took a long t
   res.sendFile(__dirname + '/public/res/' + req.params.folder + '/' + req.params.filen);
 
 });
+
+
+
+
+//Create Database Connection
+var pgp = require('pg-promise')();
+
+/**********************
+  Database Connection information
+  host: This defines the ip address of the server hosting our database.  We'll be using localhost and run our database on our local machine (i.e. can't be access via the Internet)
+  port: This defines what port we can expect to communicate to our database.  We'll use 5432 to talk with PostgreSQL
+  database: This is the name of our specific database.  From our previous lab, we created the football_db database, which holds our football data tables
+  user: This should be left as postgres, the default user account created when PostgreSQL was installed
+  password: This the password for accessing the database.  You'll need to set a password USING THE PSQL TERMINAL THIS IS NOT A PASSWORD FOR POSTGRES USER ACCOUNT IN LINUX!
+**********************/
+const dbConfig = {
+	host: 'localhost',
+	port: 5432,
+	database: 'carl',
+	user: 'postgres',
+	password: 'Poopie100$',
+};
+
+var db = pgp(dbConfig);
+
+//get request to retreive canvas url and convert to bit string 
+app.get('/past-drawings', function(req, res) {
+  var theURL= canvas.toDataURL();
+ 
+	db.task('get-everything', task => { 
+    return task.batch([
+      task.any(thecanvases)
+    ]);
+  })
+  .then(data => {
+    res.render('past-drawings' , {
+      my_title: "Past Drawings",
+      allcanvases: data[0]
+
+    })
+  })
+  .catch(err => {
+    console.log('error', err);
+    res.render('past-drawings', {
+      my_title: "Past Drawings",
+      allcanvases: ''
+    })
+  });
+});
+
+
+
+
+
+//get request to display all old canvases in order of date created 
+app.get('/past-drawings', function(req, res) {
+  var thecanvases= 'SELECT * FROM canvases ORDER BY date_created;';
+ 
+	db.task('get-everything', task => { 
+    return task.batch([
+      task.any(thecanvases)
+    ]);
+  })
+  .then(data => {
+    res.render('past-drawings' , {
+      my_title: "Past Drawings",
+      allcanvases: data[0]
+
+    })
+  })
+  .catch(err => {
+    console.log('error', err);
+    res.render('past-drawings', {
+      my_title: "Past Drawings",
+      allcanvases: ''
+    })
+  });
+});
+
 app.get("/:req_page/", function (req, res) { // yikes this took a long time
   //res.sendFile(__dirname +'/public/about-me-pages/about-us.ejs')
   let curr_path = path.parse(req.originalUrl);
@@ -66,54 +148,4 @@ app.get("/about-me-pages/:req_page", function (req, res) { // yikes this took a 
 io.on('connection', (socket) => {
   console.log('user connected: ' + socket.id);
   yggdrasil.createYggdrasil(io,socket);
-});
-
-
-
-
-
-
-//Create Database Connection
-var pgp = require('pg-promise')();
-
-/**********************
-  Database Connection information
-  host: This defines the ip address of the server hosting our database.  We'll be using localhost and run our database on our local machine (i.e. can't be access via the Internet)
-  port: This defines what port we can expect to communicate to our database.  We'll use 5432 to talk with PostgreSQL
-  database: This is the name of our specific database.  From our previous lab, we created the football_db database, which holds our football data tables
-  user: This should be left as postgres, the default user account created when PostgreSQL was installed
-  password: This the password for accessing the database.  You'll need to set a password USING THE PSQL TERMINAL THIS IS NOT A PASSWORD FOR POSTGRES USER ACCOUNT IN LINUX!
-**********************/
-const dbConfig = {
-	host: 'localhost',
-	port: 5432,
-	database: 'carl',
-	user: 'postgres',
-	password: 'CARL',
-};
-
-var db = pgp(dbConfig);
-
-
-
-
-
-//get request to display all old canvases in order of date created 
-app.get('/past-drawings', function(req, res) {
-	var query = 'SELECT img_64bitcode FROM canvases ORDER BY date;';
-	db.any(query)
-        .then(function (rows) {
-            res.render('views/past-drawings',{
-				my_title: "Past Drawings",
-				data: rows
-			})
-
-        })
-        .catch(function (err) {
-            console.log('error', err);
-            res.render('views/past-drawings', {
-                my_title: 'Past Drawings',
-                data: ''
-            })
-        })
 });

@@ -3,13 +3,27 @@ body {
   background: aqua;
 }
 
-canvas {
+#thisCursor {
   position: fixed;
-  background:white;
+  top: 0px;
+  left: 0px;
+}
+
+#draw-canvas{
+  background: white;
+  position: fixed;
   left: 30%;
   top: 10%;
   user-select: none;
 }
+
+#cursor-canvas{
+  position: fixed;
+  left: 30%;
+  top: 10%;
+  user-select: none;
+}
+
 #room-req{
   width: 300px;
 }

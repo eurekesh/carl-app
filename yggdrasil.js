@@ -39,17 +39,6 @@ function processCursor(cursorLocation){
     io.to(currentRoom).emit('cursor_to_client', cursorLocation);
 }
 
-function requestRoom(id){ // client is looking for a room, let's try and find a match
-    let found = -1;
-    for(let i = 0; i < active_rooms.length; i++) // iterate through active_rooms
-    {
-        if(active_rooms[i].id == id){
-            found = i;
-            break;
-        }
-    }
-    return found;
-}
 function extractData(canvas_string){ // we request a canvas from the host to give to new users, here's what we do with it
     console.log("canvas string updated: " + canvas_string.substr(0,50));
     let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
@@ -59,8 +48,6 @@ function extractData(canvas_string){ // we request a canvas from the host to giv
 
 function requestRoom(id){ // client is looking for a room, let's try and find a match; this is a ROOM ID not socket id (a user)
     let found = findRoom(id);
-    // console.log("new user queue: ", new_user_queue, " id: ", id);
-    console.log(typeof id);
 
     if (found === -1) {
         this.emit('join failed');
@@ -109,7 +96,13 @@ function generateID() { // based on https://www.codegrepper.com/code-examples/de
 }
 
 function emitStartGame(){
+  const noun = chooseNoun();
   console.log("emitting start game to clients");
   let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
-  io.to(currentRoom).emit('start game');
+  io.to(currentRoom).emit('start game', noun);
+}
+
+function chooseNoun(){
+  nounArr = ["pipe","knife","candlestick","revolver","rope"];
+  return nounArr[Math.floor(Math.random() * nounArr.length)];
 }

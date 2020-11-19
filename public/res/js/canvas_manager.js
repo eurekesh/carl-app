@@ -6,6 +6,7 @@ var socket = io(); // connects to socket.io server
 var roomID;
 var first_user = false;
 var req_user = false;
+var gen_color = genColor();
 
 var isHost = false;
 
@@ -64,7 +65,7 @@ function draw(e) { // going to be used for collecting input
   if (e.buttons !== 1) return;
 
   ctx.beginPath(); // begin
-  var gen_color = genColor(); // generates a color
+  // var gen_color = genColor(); // generates a color
 
   var stroke_data = [pos.x,pos.y]; // initial x1,y1
   setPosition(e); // changing coordinates
@@ -118,8 +119,12 @@ function sendRoomJoinReq(){
 }
 
 function hostStartGame(){
-  console.log("inside hostStartGame()")
+  chooseNoun();
   socket.emit('host start game');
+}
+
+function chooseNoun(){
+
 }
 function startGame(){
   //start timer

@@ -2,6 +2,7 @@ var active_rooms = []; // will use format {id: some_id, num_users: some_number},
 var io;
 var soc;
 var new_user_queue = [];
+
 // to note, "this" keyword is required for sending private events to the particular client that is calling a function
 exports.createYggdrasil = function(io_obj,socket){
     soc = socket;

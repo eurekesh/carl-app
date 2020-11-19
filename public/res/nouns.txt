@@ -1,0 +1,11 @@
+lamp
+apple
+dog
+whale
+teapot
+shoe
+elephant
+microwave
+dentist
+cereal
+wardrobe

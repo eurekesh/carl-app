@@ -96,7 +96,7 @@ function genColor(){ // random hex color
   return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 function eraseCanvas(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
 }
 function sendData(raw_dat){ // going to emit data
   socket.emit('send data',raw_dat);
@@ -124,7 +124,7 @@ function hostStartGame(){
 
 function startGame(noun){
   //start timer
-  eraseCanvas()
+  eraseCanvas();
   document.getElementById('start-game').disabled = true;
   document.getElementById('noun').innerHTML = noun;
   //send timer data with emit

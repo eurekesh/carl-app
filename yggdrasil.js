@@ -103,6 +103,6 @@ function emitStartGame(){
 }
 
 function chooseNoun(){
-  nounArr = ["pipe","knife","candlestick","revolver","rope"];
+  nounArr = ["microwave","knife","candlestick","revolver","lamppost","YEET","school of fish","jungle","whale"];
   return nounArr[Math.floor(Math.random() * nounArr.length)];
 }

@@ -124,6 +124,7 @@ function hostStartGame(){
 
 function startGame(noun){
   //start timer
+  eraseCanvas()
   document.getElementById('start-game').disabled = true;
   document.getElementById('noun').innerHTML = noun;
   //send timer data with emit

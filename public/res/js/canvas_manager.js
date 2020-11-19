@@ -208,7 +208,7 @@ socket.on('successful join',function(data){ // successfully joined!
 socket.on('request canvas',function(){ // a new client is joining soon, let's send them our current canvas state
   if(first_user) {
     console.log("a new client is joining, calculating and sending canvas state");
-    let calc_string = canvas.toDataURL();
+    let calc_string = drawCanvas.toDataURL();
     socket.emit('send canvas', calc_string);
   }
   else{

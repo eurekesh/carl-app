@@ -15,7 +15,7 @@ const ctx = drawCanvas.getContext('2d'); // we are using a 2d canvas
 const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
 
 //timer vars
-var timeLeft = 5;
+var timeLeft = 10;
 var timer = document.getElementById('timer');
 var timerId;
 var thisCursor = document.getElementById('thisCursor');
@@ -117,9 +117,13 @@ function sendRoomJoinReq(){
   req_user = true;
 }
 
+function hostStartGame(){
+  console.log("inside hostStartGame()")
+  socket.emit('host start game');
+}
 function startGame(){
   //start timer
-  socket.emit('game start');
+  document.getElementById('start-game').disabled = true;
   //send timer data with emit
   console.log("game is about to YEET");
   cursorCanvas.addEventListener('mousemove', draw);
@@ -128,7 +132,8 @@ function startGame(){
 function endGame(){
   console.log("We're in the endgame now.");
   cursorCanvas.removeEventListener('mousemove', draw);
-  timeLeft = 5;
+  timeLeft = 10;
+  document.getElementById('start-game').disabled = false;
 }
 function countdown() {
   if (timeLeft == -1) {
@@ -206,4 +211,8 @@ socket.on('request canvas',function(){ // a new client is joining soon, let's se
   else{
     console.log("a new client is joining, but we aren't the first user so no calculations needed")
   }
+})
+
+socket.on('start game', function(){
+  startGame()
 })

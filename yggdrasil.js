@@ -14,14 +14,22 @@ exports.createYggdrasil = function(io_obj,socket){
     soc.on('create game', createNewRoom);
     soc.on('req room', requestRoom);
     soc.on('send data', processData);
-    soc.on('send canvas', extractData)
+    soc.on('send canvas', extractData);
+    soc.on('host start game', emitStartGame);
 
     //setInterval(updateRoomState,5000); // update the room state with a base64 png TODO: maybe just request room state from new client?
 };
 
 function findRoom(id){ // given a room id (6 chars that define the room), find it's index in active_rooms
-    soc.on('send cursor', processCursor);
-    soc.on('game start', startTimer);
+    let found = -1;
+  for(let i = 0; i < active_rooms.length; i++) // iterate through active_rooms
+  {
+    if(active_rooms[i].id == id){
+        found = i;
+        break;
+    }
+  }
+  return found;
 };
 
 function processCursor(cursorLocation){
@@ -47,12 +55,14 @@ function extractData(canvas_string){ // we request a canvas from the host to giv
     console.log(currentRoom);
     io.to(currentRoom).emit('initial canvas',canvas_string); // we emit to the room that was waiting
 }
+
 function requestRoom(id){ // client is looking for a room, let's try and find a match; this is a ROOM ID not socket id (a user)
     let found = findRoom(id);
+    // console.log("new user queue: ", new_user_queue, " id: ", id);
+    console.log(typeof id);
 
     if (found === -1) {
         this.emit('join failed');
-        console.log('client ' + this.id + ' tried to join, but failed. room ' + id + ' cannot be found')
     } else {
         io.to(id).emit('request canvas'); // BEFORE the client joins, let's request a current canvas, use client side flag to only get it from first user who created room
         new_user_queue.push(active_rooms[found].id); // stores the ROOM that we want to send a canvas update to, client side flags handle the rest
@@ -96,6 +106,9 @@ function generateID() { // based on https://www.codegrepper.com/code-examples/de
     }
     return res;
 }
-function startTimer(){
-  console.log("does startTimer work");
+
+function emitStartGame(){
+  console.log("emitting start game to clients");
+  let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
+  io.to(currentRoom).emit('start game');
 }

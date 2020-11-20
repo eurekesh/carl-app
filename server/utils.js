@@ -1,4 +1,6 @@
-function generateID() { // based on https://www.codegrepper.com/code-examples/delphi/how+to+generate+random+alphabet+in+javascript
+const nouns = require('./nouns.js');
+
+ function generateID() { // based on https://www.codegrepper.com/code-examples/delphi/how+to+generate+random+alphabet+in+javascript
     let res = "";
     let possible = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz023456789"; // I have removed i,I,l,L, and 1 because they are often confused
 
@@ -9,8 +11,8 @@ function generateID() { // based on https://www.codegrepper.com/code-examples/de
 }
 
 function chooseNoun(){
-    const nounArr = ["microwave","knife","candlestick","revolver","lamppost","YEET","school of fish","jungle","whale"];
-    return nounArr[Math.floor(Math.random() * nounArr.length)];
+  nounArr = nouns.nounList;
+  return nounArr[Math.floor(Math.random() * nounArr.length)];
 }
 
 module.exports = {

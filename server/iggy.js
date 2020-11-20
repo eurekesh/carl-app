@@ -100,8 +100,3 @@ function emitUsersUpdate(hostsUsersParagraph){
   let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
   io.to(currentRoom).emit('copy hosts users', hostsUsersParagraph);
 }
-
-function chooseNoun(){
-  nounArr = ["microwave","knife","candlestick","revolver","lamppost","YEET","school of fish","jungle","whale"];
-  return nounArr[Math.floor(Math.random() * nounArr.length)];
-}

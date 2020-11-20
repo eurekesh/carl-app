@@ -26,7 +26,6 @@
   <br>
     <p id="socketID"></p>
     <p id="gameID">You are in the lobby, feel free to draw and then enter a room ID <br>when you're ready to play with friends!</p>
-    <p id="users"> users </p>
   <button type="button" id="create-room" class="btn btn-primary" onclick="sendRoomCreateReq()">Create Room</button>
   <form>
     <div class="form-group">
@@ -40,6 +39,7 @@
   <button type="button" id="start-game" class="btn btn-primary" onclick="hostStartGame()" disabled>Start Game</button>
   <h1 id="noun">noun goes here</h1>
   <div id="timer"></div>
+  <p id="users"> users </p>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/res/js/canvas_manager.js" charset="utf-8"></script>
   </body>

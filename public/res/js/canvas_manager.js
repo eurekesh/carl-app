@@ -191,13 +191,25 @@ socket.on('initial canvas',function(data){ // if the client is new, process the 
 socket.on('successful join',function(data){ // successfully joined!
   console.log('successfully joined a room!');
   const getRoomID = document.getElementById('room-req').value;
-
   gameID.innerHTML = 'Share this code with friends: ' + getRoomID;
   roomID = getRoomID;
   document.getElementById('room-req').disabled = true; // don't let them submit any more rooms
   document.getElementById('create-room').disabled = true;
   document.getElementById('room-submit').disabled = true;
 
+})
+
+socket.on('new user id', function(id){
+  if(isHost == true){
+    var usersParagraph = document.getElementById('users').innerHTML += "<br>" + id;
+    socket.emit('host added user', usersParagraph);
+  }
+})
+
+socket.on('copy hosts users', function(usersParagraph){ 
+  if(isHost == false){
+    document.getElementById('users').innerHTML = usersParagraph;
+  }
 })
 
 socket.on('request canvas',function(){ // a new client is joining soon, let's send them our current canvas state

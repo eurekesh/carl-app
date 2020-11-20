@@ -17,6 +17,7 @@ exports.createYggdrasil = function(io_obj,socket){
     soc.on('send data', processData);
     soc.on('send canvas', extractData);
     soc.on('host start game', emitStartGame);
+    soc.on('host added user', emitUsersUpdate);
     soc.on('send cursor', processCursor);
 
     //setInterval(updateRoomState,5000); // update the room state with a base64 png TODO: maybe just request room state from new client?
@@ -60,8 +61,8 @@ function requestRoom(id){ // client is looking for a room, let's try and find a 
         active_rooms[found].num_users++; // TODO: use setInterval to clean out old rooms
         console.log('client ' + this.id + ' successfully joined room ' + id + '!');
         this.emit('successful join');
+	io.to(active_rooms[found].id).emit('new user id', this.id);
     }
-
 }
 
 function createNewRoom(){
@@ -101,6 +102,11 @@ function emitStartGame(){
   console.log("emitting start game to clients");
   let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
   io.to(currentRoom).emit('start game', noun);
+}
+
+function emitUsersUpdate(hostsUsersParagraph){
+  let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
+  io.to(currentRoom).emit('copy hosts users', hostsUsersParagraph);
 }
 
 function chooseNoun(){

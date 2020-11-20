@@ -63,7 +63,7 @@ function requestRoom(id){ // client is looking for a room, let's try and find a 
         active_rooms[found].num_users++; // TODO: use setInterval to clean out old rooms
         console.log('client ' + this.id + ' successfully joined room ' + id + '!');
         this.emit('successful join');
-	io.to(active_rooms[found].id).emit('new user id', this.id);
+	      io.to(active_rooms[found].id).emit('new user id', this.id);
     }
 }
 
@@ -79,7 +79,7 @@ function createNewRoom(){
     this.leaveAll(); // force the client to leave it's old rooms so we can do what we want
     this.join(new_room.id); // join the new room
     console.log('new room id created: ' + new_room.id + ' for a very happy customer: ' + this.id);
-
+    io.to(new_room.id).emit('new user id', this.id);
 }
 
 function processData(data){ // receives draw data and processes where to send it
@@ -105,4 +105,3 @@ function chooseNoun(){
   nounArr = ["microwave","knife","candlestick","revolver","lamppost","YEET","school of fish","jungle","whale"];
   return nounArr[Math.floor(Math.random() * nounArr.length)];
 }
-

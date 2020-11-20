@@ -17,6 +17,7 @@ exports.createYggdrasil = function(io_obj,socket){
     soc.on('send data', processData);
     soc.on('send canvas', extractData);
     soc.on('host start game', emitStartGame);
+    soc.on('send cursor', processCursor);
 
     //setInterval(updateRoomState,5000); // update the room state with a base64 png TODO: maybe just request room state from new client?
 };

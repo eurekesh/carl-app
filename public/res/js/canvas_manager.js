@@ -23,36 +23,33 @@ var thisCursor = document.getElementById('thisCursor');
 
 // last known position
 let pos = { x: 0, y: 0 };
-let cursorPos = { curX: 0, curY: 0, prevX: 0, prevY: 0 };
+let cursorPos = { x: 0, y: 0 };
 
 // sets some brush variables // TODO: look into this more for game options later
 ctx.lineWidth = 5;
 ctx.lineCap = 'round';
 
 // add some listeners - UPDATE: only to the canvas, stop tracking coordinates in the middle of nowhere and sending them to the server
-cursorCanvas.addEventListener('mousemove', updateCursor);
 cursorCanvas.addEventListener('mousedown', setPosition);
 cursorCanvas.addEventListener('mouseenter', setPosition);
+cursorCanvas.addEventListener('mousemove', updateCursor);
 
 function updateCursor(e){
-  console.log("Cursorrrrrrr", cursorPos);
+  console.log("cursor position: ", cursorPos);
   setCursorPosition(e);
   socket.emit('send cursor', cursorPos);
 }
 
 function setCursorPosition(e){
-  cursorPos.curX = e.clientX - cursorCanvas.offsetLeft;
-  cursorPos.curY = e.clientY - cursorCanvas.offsetTop;
+  cursorPos.x = e.clientX; // - cursorCanvas.offsetLeft;
+  cursorPos.y = e.clientY; // - cursorCanvas.offsetTop;
 }
 
 function renderCursor(cursorData){
-//  thisCursor.style.left = cursorPos.x + 'px';
-//  thisCursor.style.top = cursorPos.y + 'px';
-  cursorCtx.clearRect(0, 0, 700, 700);
-  cursorCtx.fillRect(cursorData.curX, cursorData.curY, 10, 10);
-  cursorPos.prevX = cursorPos.curX;
-  cursorPos.prevY = cursorPos.curY;
+  thisCursor.style.left = cursorPos.x + 'px';
+  thisCursor.style.top = cursorPos.y + 'px';
 }
+
 
 // new position from mouse event
 function setPosition(e) {
@@ -149,8 +146,6 @@ function countdown() {
 }
 
 socket.on('cursor_to_client',function(cursorData) {
-  console.log(cursorData);
-  console.log('cursor data received from server')
   renderCursor(cursorData);
 })
 

@@ -7,6 +7,7 @@ body {
   position: fixed;
   top: 0px;
   left: 0px;
+  z-index: 1;
 }
 
 #draw-canvas{
@@ -15,6 +16,7 @@ body {
   left: 30%;
   top: 10%;
   user-select: none;
+  z-index: 0;
 }
 
 #cursor-canvas{
@@ -22,6 +24,7 @@ body {
   left: 30%;
   top: 10%;
   user-select: none;
+  z-index: 2;
 }
 
 #room-req{

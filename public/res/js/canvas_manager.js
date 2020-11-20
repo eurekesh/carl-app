@@ -207,3 +207,10 @@ socket.on('request canvas',function(){ // a new client is joining soon, let's se
     console.log("a new client is joining, but we aren't the first user so no calculations needed")
   }
 })
+
+
+  
+
+  module.exports=function(){
+    return("hello");
+  }

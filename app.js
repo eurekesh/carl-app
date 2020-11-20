@@ -54,6 +54,9 @@ const dbConfig = {
 
 var db = pgp(dbConfig);
 
+
+
+/*
 //get request to retreive canvas url and convert to bit string 
 app.get('/past-drawings', function(req, res) {
   var theURL= canvas.toDataURL();
@@ -78,6 +81,7 @@ app.get('/past-drawings', function(req, res) {
     })
   });
 });
+*/
 
 
 

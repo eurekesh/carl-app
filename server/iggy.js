@@ -1,3 +1,5 @@
+const util = require('./utils.js');
+
 var active_rooms = []; // will use format {id: some_id, num_users: some_number}, may add user ids later?
 var io;
 var soc;
@@ -67,7 +69,7 @@ function requestRoom(id){ // client is looking for a room, let's try and find a 
 
 function createNewRoom(){
     let new_room = {id: '', num_users: 1};
-    new_room.id = generateID(); // generate a room id (defined below)
+    new_room.id = util.generateID(); // generate a room id (defined below)
     this.emit('create game success',
     {
         gameID: new_room.id,
@@ -87,18 +89,8 @@ function processData(data){ // receives draw data and processes where to send it
     io.to(currentRoom).emit('to_client',data); // send it!
 }
 
-function generateID() { // based on https://www.codegrepper.com/code-examples/delphi/how+to+generate+random+alphabet+in+javascript
-    let res = "";
-    let possible = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz023456789"; // I have removed i,I,l,L, and 1 because they are often confused
-
-    for (let i = 0; i < 6; i++) {
-        res += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return res;
-}
-
 function emitStartGame(){
-  const noun = chooseNoun();
+  const noun = util.chooseNoun();
   console.log("emitting start game to clients");
   let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
   io.to(currentRoom).emit('start game', noun);
@@ -113,3 +105,4 @@ function chooseNoun(){
   nounArr = ["microwave","knife","candlestick","revolver","lamppost","YEET","school of fish","jungle","whale"];
   return nounArr[Math.floor(Math.random() * nounArr.length)];
 }
+

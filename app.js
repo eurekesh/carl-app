@@ -4,7 +4,7 @@ const app = express();
 const serv = require('http').createServer(app);
 const io = require('socket.io')(serv);
 const port = process.env.PORT || 3000;
-const yggdrasil = require('./yggdrasil');
+const yggdrasil = require('./server/iggy');
 
 serv.listen(port,()=> {
   console.log('Server successfully started at port %d',port);

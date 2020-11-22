@@ -5,6 +5,18 @@ const serv = require('http').createServer(app);
 const io = require('socket.io')(serv);
 const port = process.env.PORT || 3000;
 const yggdrasil = require('./server/iggy');
+var pgp = require('pg-promise')();
+
+let dbConfig = {
+  host: 'localhost',
+  port: 5432,
+  database: 'carl',
+  user: 'postgres',
+  password: 'Poopie100$',
+};
+const isProduction = process.env.NODE_ENV === 'production';
+dbConfig = isProduction ? process.env.DATABASE_URL : dbConfig;
+var db = pgp(dbConfig);
 
 serv.listen(port,()=> {
   console.log('Server successfully started at port %d',port);
@@ -15,6 +27,29 @@ app.set('views', [__dirname+'/public/views/pages', __dirname+'/public/views/abou
 
 app.set('view engine', 'ejs')
 app.use(express.static(__dirname+ "public/"))
+
+app.get('/past-drawings', function(req, res) {
+  const db_query = 'SELECT * FROM canvases ORDER BY date_created;';
+
+  db.task('get-everything', task => {
+    return task.batch([
+      task.any(db_query)
+    ]);
+  })
+      .then(data => {
+        res.render('past-drawings' , {
+          my_title: "Past Drawings",
+          allcanvases: data[0]
+        })
+      })
+      .catch(err => {
+        console.log('error', err);
+        res.render('past-drawings', {
+          my_title: "Past Drawings",
+          allcanvases: ''
+        })
+      });
+});
 
 app.get("/", function (req, res) {
   //res.sendFile(__dirname +'/public/about-me-pages/about-us.ejs')

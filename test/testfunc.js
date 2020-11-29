@@ -1,11 +1,10 @@
 var assert= require('chai').assert;
-//cont fileImtesting= require('../../../yggdrasil').functionimTesting;
-const thefile= require('../public/res/js/canvas_manager');
+var thefile= require('../public/res/js/canmancopy');
 
 
 describe('practicehello', function(){
     it('should return hello', function(){
-        let result=thefile();
+        let result=thefile().hello;
         assert.equal(result, "hello");
     });
 });

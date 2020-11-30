@@ -24,5 +24,20 @@
               </li>
             </ul>
           </nav>
-    </body>
+        </body>
+            <!-- insert js here to display all-->
+
+            <div class="container">
+              <%
+                      if (allcanvases) {
+                        var imgs = '';
+                        allcanvases.forEach(function(item){
+                          var imgsrc= "data:image/png;base64," + item.img_64bitcode;
+                          imgs += '<img id = "canvas_img" src="' + imgsrc + '" alt="a past canvas" style="width:500px;height:600px;" />'
+                        }); %>
+              <%- imgs %>
+              <% } %>
+            </div>
+
+    
 </html>

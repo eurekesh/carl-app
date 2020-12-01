@@ -1,10 +1,29 @@
 <%- include('../components/head') %>
             <link href="/res/stylesheets/navBar.css" rel="stylesheet">
+            <link href="res/stylesheets/pastDrawings.css" rel="stylesheet">
             <title>Past Drawings</title>
-
+            <style>
+              body {
+                  background-color: #1a1c20;
+                  background-size: 100% 100%;
+              }
+          </style>
   </head>
     <body>
 
       <%- include('../components/menu') %>
+      <br><br>
+      <div class="myHeading">
+        <h1 >Previous Drawings</h1>
+      </div>
+      <form action="/action_page.php">
+        <label class="subTitle" for="fname">Noun Search:</label>
+        <br>
+        <input type="text" id="fname" name="fname" value="Type Keyword...">
+        <br>
+        <br>
+       <button type="button" class="rounded" value="Submit">Submit</button> <!-- // need to make this an html button. -->
+      </form> 
+      
     </body>
 </html>

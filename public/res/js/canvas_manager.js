@@ -134,6 +134,12 @@ function endGame(){
   cursorCanvas.removeEventListener('mousemove', draw);
   timeLeft = 30;
   document.getElementById('start-game').disabled = false;
+  //send finished canvas to server
+  if(isHost == true){
+    socket.emit('send final canvas', drawCanvas.toDataURL());
+  }
+
+
 }
 function countdown() {
   if (timeLeft == -1) {
@@ -206,7 +212,7 @@ socket.on('new user id', function(id){
   }
 })
 
-socket.on('copy hosts users', function(usersParagraph){ 
+socket.on('copy hosts users', function(usersParagraph){
   if(isHost == false){
     document.getElementById('users').innerHTML = usersParagraph;
   }

@@ -7,16 +7,7 @@ const port = process.env.PORT || 3000;
 const yggdrasil = require('./server/iggy');
 var pgp = require('pg-promise')();
 
-let dbConfig = {
-  host: 'localhost',
-  port: 5432,
-  database: 'carl',
-  user: 'postgres',
-  password: 'Poopie100$',
-};
-const isProduction = process.env.NODE_ENV === 'production';
-dbConfig = isProduction ? process.env.DATABASE_URL : dbConfig;
-var db = pgp(dbConfig);
+
 
 serv.listen(port,()=> {
   console.log('Server successfully started at port %d',port);
@@ -29,18 +20,31 @@ app.set('views', [__dirname+'/public/views/pages', __dirname+'/public/views/abou
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname,"public")))
 
+let dbConfig = {
+  host: 'localhost',
+  port: 5432,
+  database: 'carl',
+  user: 'postgres',
+  password: 'Poopie100$',
+};
+const isProduction = process.env.NODE_ENV === 'production';
+dbConfig = isProduction ? process.env.DATABASE_URL : dbConfig;
+var db = pgp(dbConfig);
+
+//get request to display all old canvases in order of date created
 app.get('/past-drawings', function(req, res) {
-  const db_query = 'SELECT * FROM canvases ORDER BY date_created;';
+  var thecanvases= 'SELECT * FROM canvases ORDER BY date_created;';
 
   db.task('get-everything', task => {
     return task.batch([
-      task.any(db_query)
+      task.any(thecanvases)
     ]);
   })
       .then(data => {
         res.render('past-drawings' , {
           my_title: "Past Drawings",
           allcanvases: data[0]
+
         })
       })
       .catch(err => {
@@ -68,84 +72,8 @@ app.get("/res/:folder/:filen", function (req, res) { // yikes this took a long t
 
 
 
-//Create Database Connection
-var pgp = require('pg-promise')();
-
-/**********************
-  Database Connection information
-  host: This defines the ip address of the server hosting our database.  We'll be using localhost and run our database on our local machine (i.e. can't be access via the Internet)
-  port: This defines what port we can expect to communicate to our database.  We'll use 5432 to talk with PostgreSQL
-  database: This is the name of our specific database.  From our previous lab, we created the football_db database, which holds our football data tables
-  user: This should be left as postgres, the default user account created when PostgreSQL was installed
-  password: This the password for accessing the database.  You'll need to set a password USING THE PSQL TERMINAL THIS IS NOT A PASSWORD FOR POSTGRES USER ACCOUNT IN LINUX!
-**********************/
-const dbConfig = {
-	host: 'localhost',
-	port: 5432,
-	database: 'carl',
-	user: 'postgres',
-	password: 'Poopie100$',
-};
-
-var db = pgp(dbConfig);
 
 
-
-/*
-//get request to retreive canvas url and convert to bit string 
-app.get('/past-drawings', function(req, res) {
-  var theURL= canvas.toDataURL();
- 
-	db.task('get-everything', task => { 
-    return task.batch([
-      task.any(thecanvases)
-    ]);
-  })
-  .then(data => {
-    res.render('past-drawings' , {
-      my_title: "Past Drawings",
-      allcanvases: data[0]
-
-    })
-  })
-  .catch(err => {
-    console.log('error', err);
-    res.render('past-drawings', {
-      my_title: "Past Drawings",
-      allcanvases: ''
-    })
-  });
-});
-*/
-
-
-
-
-
-//get request to display all old canvases in order of date created 
-app.get('/past-drawings', function(req, res) {
-  var thecanvases= 'SELECT * FROM canvases ORDER BY date_created;';
- 
-	db.task('get-everything', task => { 
-    return task.batch([
-      task.any(thecanvases)
-    ]);
-  })
-  .then(data => {
-    res.render('past-drawings' , {
-      my_title: "Past Drawings",
-      allcanvases: data[0]
-
-    })
-  })
-  .catch(err => {
-    console.log('error', err);
-    res.render('past-drawings', {
-      my_title: "Past Drawings",
-      allcanvases: ''
-    })
-  });
-});
 
 app.get("/:req_page/", function (req, res) { // yikes this took a long time
   //res.sendFile(__dirname +'/public/about-me-pages/about-us.ejs')

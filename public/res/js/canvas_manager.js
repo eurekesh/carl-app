@@ -224,19 +224,19 @@ socket.on('new user id', function(id){
 socket.on('new user id', function(id){
   if(isHost == true){
     //let usersInfo = [document.getElementById('users').innerHTML += "<br>" + id, id, document.getElementById('cursors').innerHTML];
-    users += id;
+    users.push(id);
     socket.emit('host added user', users);
   }
 })
 
 socket.on('copy hosts users', function(usersInfo){
-//  let usersList = "freinds <br>";
-
-//  for(i = 0; i < usersInfo.length; i++){
-//    usersList += usersInfo[i];
-//  }
-//  usersList += "<br>";
-//  document.getElementById('users').innerHTML = usersList;
+ let usersList = "Friends <br>";
+  alert(usersInfo);
+ for(let i = 0; i < usersInfo.length; i++){
+   usersList += "<br>" + usersInfo[i];
+ }
+ usersList += "<br>";
+ document.getElementById('users').innerHTML = usersList;
 
 /*
   if(isHost == false){

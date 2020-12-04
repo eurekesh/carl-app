@@ -10,10 +10,7 @@ exports.createYggdrasil = function(io_obj,socket){
     soc = socket;
     io = io_obj;
 
-    socket.emit('roots made',
-        {
-            confirm: "You can now be sorted."
-        });
+    socket.emit('roots made', soc.id);
     soc.on('create game', createNewRoom);
     soc.on('req room', requestRoom);
     soc.on('send data', processData);
@@ -38,10 +35,10 @@ function findRoom(id){ // given a room id (6 chars that define the room), find i
   return found;
 };
 
-function processCursor(cursorLocation){
+function processCursor(cursorInfo){
     let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so
-    console.log("Current room: ", currentRoom, "cursorLocation: ", cursorLocation);
-    io.to(currentRoom).emit('cursor_to_client', cursorLocation);
+    //console.log("Current room: ", currentRoom, "cursorLocation: ", cursorLocation);
+    io.to(currentRoom).emit('cursor_to_client', cursorInfo);
 }
 
 function extractData(canvas_string){ // we request a canvas from the host to give to new users, here's what we do with it
@@ -97,7 +94,7 @@ function emitStartGame(){
   io.to(currentRoom).emit('start game', noun);
 }
 
-function emitUsersUpdate(hostsUsersParagraph){
+function emitUsersUpdate(usersInfo){
   let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
-  io.to(currentRoom).emit('copy hosts users', hostsUsersParagraph);
+  io.to(currentRoom).emit('copy hosts users', usersInfo);
 }

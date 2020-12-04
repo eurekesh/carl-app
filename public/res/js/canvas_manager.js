@@ -10,7 +10,7 @@ var gen_color = genColor();
 
 var isHost = false;
 
-var socID = document.getElementById('socketID');
+var socID;
 var gameID = document.getElementById('gameID');
 const ctx = drawCanvas.getContext('2d'); // we are using a 2d canvas
 const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
@@ -19,7 +19,6 @@ const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
 var timeLeft = 30;
 var timer = document.getElementById('timer');
 var timerId;
-var thisCursor = document.getElementById('thisCursor');
 
 // last known position
 let pos = { x: 0, y: 0 };
@@ -35,9 +34,12 @@ cursorCanvas.addEventListener('mouseenter', setPosition);
 cursorCanvas.addEventListener('mousemove', updateCursor);
 
 function updateCursor(e){
-  console.log("cursor position: ", cursorPos);
+  //console.log("cursor position: ", cursorPos);
   setCursorPosition(e);
-  socket.emit('send cursor', cursorPos);
+  let cursorInfo = [cursorPos, socID]; 
+  if(roomID){
+    socket.emit('send cursor', cursorInfo);
+  }
 }
 
 function setCursorPosition(e){
@@ -46,8 +48,9 @@ function setCursorPosition(e){
 }
 
 function renderCursor(cursorData){
-  thisCursor.style.left = cursorPos.x + 'px';
-  thisCursor.style.top = cursorPos.y + 'px';
+  let cursor = document.getElementById(cursorData[1]);
+  cursor.style.left = cursorPos.x + 'px';
+  cursor.style.top = cursorPos.y + 'px';
 }
 
 
@@ -162,12 +165,13 @@ socket.on('to_client',function(data) {
   drawData(data);
 })
 
-socket.on('roots made', function(msg){ // successfully handshake with room handler server side
-  console.log(msg);
+socket.on('roots made', function(id){ // successfully handshake with room handler server side
+  socID = id;
+  console.log(id);
 })
 
 socket.on('create game success', function(data){ // successfully created game
-  socID.innerHTML = data.yourSocketId;
+  //socID.innerHTML = data.yourSocketId;
   gameID.innerHTML = 'Share this code with friends: ' + data.gameID;
   roomID = data.gameID;
   req_user = false;
@@ -207,16 +211,31 @@ socket.on('successful join',function(data){ // successfully joined!
 
 })
 
+/* works with only single cursor
 socket.on('new user id', function(id){
   if(isHost == true){
     var usersParagraph = document.getElementById('users').innerHTML += "<br>" + id;
     socket.emit('host added user', usersParagraph);
   }
 })
+*/
 
-socket.on('copy hosts users', function(usersParagraph){
+socket.on('new user id', function(id){
+  if(isHost == true){
+    let usersInfo = [document.getElementById('users').innerHTML += "<br>" + id, id];
+    socket.emit('host added user', usersInfo);
+  }
+
+})
+
+socket.on('copy hosts users', function(usersInfo){
   if(isHost == false){
-    document.getElementById('users').innerHTML = usersParagraph;
+    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");  
+    document.getElementById('users').innerHTML = usersInfo[0];
+  }
+
+  else{
+    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>"); 
   }
 })
 
@@ -230,6 +249,8 @@ socket.on('request canvas',function(){ // a new client is joining soon, let's se
     console.log("a new client is joining, but we aren't the first user so no calculations needed")
   }
 })
+
+
 
 socket.on('start game', function(noun){
   startGame(noun)

@@ -230,14 +230,17 @@ socket.on('new user id', function(id){
 })
 
 socket.on('copy hosts users', function(usersInfo){
- let usersList = "Friends <br>";
-  alert(usersInfo);
- for(let i = 0; i < usersInfo.length; i++){
-   usersList += "<br>" + usersInfo[i];
- }
- usersList += "<br>";
- document.getElementById('users').innerHTML = usersList;
 
+  let usersList = "<br>Friends";
+  //alert(usersInfo);
+  for(let i = 0; i < usersInfo.length; i++){
+    usersList += "<br>" + usersInfo[i];
+  }
+  document.getElementById('users').innerHTML = usersList;
+  for(let i = 0; i < usersInfo.length; i++)
+  {
+    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+  }
 /*
   if(isHost == false){
     //document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");

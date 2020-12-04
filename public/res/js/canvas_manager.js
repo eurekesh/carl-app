@@ -62,7 +62,7 @@ function setPosition(e) {
 }
 
 function draw(e) { // going to be used for collecting input
-  // must be left click right now
+                   // must be left click right now
   if (e.buttons !== 1) return;
 
   ctx.beginPath(); // begin
@@ -172,7 +172,7 @@ socket.on('roots made', function(id){ // successfully handshake with room handle
 })
 
 socket.on('create game success', function(data){ // successfully created game
-  //socID.innerHTML = data.yourSocketId;
+                                                 //socID.innerHTML = data.yourSocketId;
   gameID.innerHTML = 'Share this code with friends: ' + data.gameID;
   roomID = data.gameID;
   req_user = false;
@@ -230,18 +230,29 @@ socket.on('new user id', function(id){
 })
 
 socket.on('copy hosts users', function(usersInfo){
-  if(users.length == 0){
-    users = usersInfo;
-    for(i = 0; i < usersInfo.length; i++){
-      document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
-    }
-  }
 
-  else{
-    for(i = 0; i < usersInfo.length - users.length; i++){ 
-      document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
-    }
+  let usersList = "Friends <br>";
+  //alert(usersInfo);
+  for(let i = 0; i < usersInfo.length; i++){
+    usersList += "<br>" + usersInfo[i];
   }
+  document.getElementById('users').innerHTML = usersList;
+  for(let i = 0; i < usersInfo.length; i++)
+  {
+    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+  }
+  // if(users.length == 0){
+  //   users = usersInfo;
+  //   for(i = 0; i < usersInfo.length; i++){
+  //     document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+  //   }
+  // }
+  //
+  // else{
+  //   for(i = 0; i < usersInfo.length - users.length; i++){
+  //     document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+  //   }
+  // }
 
 //  let usersList = "freinds <br>";
 
@@ -251,22 +262,23 @@ socket.on('copy hosts users', function(usersInfo){
 //  usersList += "<br>";
 //  document.getElementById('users').innerHTML = usersList;
 
-/*
-  if(isHost == false){
-    //document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
-    if(document.getElementById('cursors').innerHTML == ""){
-      document.getElementById('cursors').insertAdjacentHTML('beforeend', usersInfo[3]);
-    }
 
+  /*
+    if(isHost == false){
+      //document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+      if(document.getElementById('cursors').innerHTML == ""){
+        document.getElementById('cursors').insertAdjacentHTML('beforeend', usersInfo[3]);
+      }
+  
+      else{
+        document.getElementById('users').innerHTML = usersInfo[0];
+      }
+    }
+  
     else{
-      document.getElementById('users').innerHTML = usersInfo[0];
+      document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
     }
-  }
-
-  else{
-    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
-  }
- */
+   */
 })
 
 socket.on('request canvas',function(){ // a new client is joining soon, let's send them our current canvas state

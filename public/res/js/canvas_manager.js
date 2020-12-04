@@ -36,7 +36,7 @@ cursorCanvas.addEventListener('mousemove', updateCursor);
 function updateCursor(e){
   //console.log("cursor position: ", cursorPos);
   setCursorPosition(e);
-  let cursorInfo = [cursorPos, socID]; 
+  let cursorInfo = [cursorPos, socID];
   if(roomID){
     socket.emit('send cursor', cursorInfo);
   }
@@ -49,8 +49,8 @@ function setCursorPosition(e){
 
 function renderCursor(cursorData){
   let cursor = document.getElementById(cursorData[1]);
-  cursor.style.left = cursorPos.x + 'px';
-  cursor.style.top = cursorPos.y + 'px';
+  cursor.style.left = cursorData[0].x + 'px';
+  cursor.style.top = cursorData[0].y + 'px';
 }
 
 
@@ -230,12 +230,12 @@ socket.on('new user id', function(id){
 
 socket.on('copy hosts users', function(usersInfo){
   if(isHost == false){
-    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");  
+    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
     document.getElementById('users').innerHTML = usersInfo[0];
   }
 
   else{
-    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>"); 
+    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
   }
 })
 

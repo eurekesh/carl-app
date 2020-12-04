@@ -44,9 +44,6 @@ app.get('/past-drawings', function(req, res) {
       .catch(err => {
         console.log(err);
       })
-      .finally(() => {
-        db.end();
-      })
 });
 
 app.get("/", function (req, res) {
@@ -100,7 +97,7 @@ app.get("/about-me-pages/:req_page", function (req, res) { // yikes this took a 
 io.on('connection', (socket) => {
   console.log('user connected: ' + socket.id);
   yggdrasil.createYggdrasil(io,socket);
-  io.on('send final canvas',function(data) {
+  socket.on('send final canvas',function(data) {
     let query = "INSERT INTO canvases VALUES('" + data[1] + "', '" + data[0] + "', CURRENT_TIMESTAMP);";
     db.query(query)
         .then(res => {
@@ -108,9 +105,6 @@ io.on('connection', (socket) => {
         })
         .catch(err => {
           console.log(err);
-        })
-        .finally(() => {
-          db.end();
         })
   })
 });

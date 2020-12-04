@@ -38,7 +38,7 @@ app.get('/past-drawings', function(req, res) {
       .then(data => {
         res.render('past-drawings' , {
           my_title: "Past Drawings",
-          allcanvases: data[0]
+          allcanvases: data
         })
       })
       .catch(err => {

@@ -36,7 +36,7 @@ function findRoom(id){ // given a room id (6 chars that define the room), find i
     }
   }
   return found;
-};
+}
 
 function processCursor(cursorLocation){
     let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so

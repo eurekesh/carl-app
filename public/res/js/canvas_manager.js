@@ -137,6 +137,7 @@ function endGame(){
   //send finished canvas to server
   if(isHost === true){
     let emit_data = [document.getElementById('noun').innerHTML, drawCanvas.toDataURL()]; // TODO: send noun data and canvas url
+    console.log('sending final data to db')
     socket.emit('send final canvas', emit_data);
   }
 

@@ -136,9 +136,9 @@ function endGame(){
   document.getElementById('start-game').disabled = false;
   //send finished canvas to server
   if(isHost === true){
-
-    let emit_data = document.getElementById('noun').innerHTML // TODO: send noun data and canvas url
-    socket.emit('send final canvas', drawCanvas.toDataURL());
+    let time = new Date();
+    let emit_data = [document.getElementById('noun').innerHTML, drawCanvas.toDataURL(), time.getTime()]; // TODO: send noun data and canvas url
+    socket.emit('send final canvas', emit_data);
   }
 
 

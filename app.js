@@ -107,7 +107,7 @@ app.get("/about-me-pages/:req_page", function (req, res) { // yikes this took a 
 io.on('connection', (socket) => {
   console.log('user connected: ' + socket.id);
   yggdrasil.createYggdrasil(io,socket);
-  io.on('send final canvas',function(data){
-    let query = "INSERT INTO canvases VALUES('"+data+"', '";
+  io.on('send final canvas',function(noun_canvas_time){
+    //let query = "INSERT INTO canvases VALUES('"+noun_canvas_time[1]+"', '";
   })
 });

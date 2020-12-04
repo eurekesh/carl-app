@@ -1,3 +1,4 @@
+
 <%- include('../components/head') %>
     <title>Highly Experimental Test Canvas</title>
     <link rel="stylesheet" href="/res/stylesheets/canvas.css">
@@ -5,7 +6,10 @@
   </head>
   <body>
   <%- include('../components/menu') %>
-    <canvas id="canvas" height="700" width="700"></canvas>
+  <div id = "cursors">
+  </div>
+  <canvas id="draw-canvas" height="700" width="700"></canvas>
+  <canvas id="cursor-canvas" height="700" width="700"></canvas>
   <!-- NOTE: canvas can ONLY be modified using these height and width values. PLEASE don't try to use CSS. don't trust me?
                 trust the cow:
                 ____________________________________
@@ -18,23 +22,68 @@
                                ||____w |
                                ||     ||
 -->
+  <!--
   <br>
   <br>
   <br>
   <br>
     <p id="socketID"></p>
     <p id="gameID">You are in the lobby, feel free to draw and then enter a room ID <br>when you're ready to play with friends!</p>
-  <button type="button" id="create-room" class="btn btn-primary" onclick="sendRoomCreateReq()">Create Room</button>
+  <button type="button" id="create-room" class="btn btn-warning" onclick="sendRoomCreateReq()">Create Room</button>
   <form>
     <div class="form-group">
       <label for="room-request">Enter your room request</label>
       <input type="text" aria-label="stuff" class="form-control" id="room-req" placeholder="Enter your room request">
-      <button type="button" id="room-submit" class="btn btn-primary" onclick="sendRoomJoinReq()">Request Room</button>
+      <button type="button" id="room-submit" class="btn btn-warning" onclick="sendRoomJoinReq()">Request Room</button>
     </div>
   </form>
-  <button type="button" id="create-room" class="btn btn-primary" onclick="eraseCanvas()">Erase Local Board</button>
+  <!-- what this button do tho? create room erase canvas?-->
+  <!-- <button type="button" id="create-room" class="btn btn-warning" onclick="eraseCanvas()">Erase Local Board</button> -->
+  <!-- <button type="button" id="start-game" class="btn btn-warning" onclick="hostStartGame()" disabled>Start Game</button>
+  <h1 id="noun">noun goes here</h1>
+  <div id="timer"></div>
+  <p id="users"> users </p>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/res/js/canvas_manager.js" charset="utf-8"></script>
   </body>
 
+</html> -->
+
+<br>
+<br>
+<br>
+<br>
+    <div class="row">
+      <div class="col" id="gameID">
+        You are in the lobby, feel free to draw and then enter a room ID when you're ready to play with friends!
+      </div>
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col"></div>
+      <div class="col">
+        <div class="card bg-warning text-center text-dark" style="width: 18rem;">
+          <h2 class="card-text text-muted">Prompt:</h2>
+          <h2 class="card-text text-muted" id="noun">________</h2>
+          <h1 id="timer">Time left</h1>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <button type="button" id="create-room" class="btn btn-warning" onclick="sendRoomCreateReq()">Create Room</button>
+    <form>
+      <div class="form-group">
+        <label for="room-request">Enter your room request</label>
+        <input type="text" aria-label="stuff" class="form-control" id="room-req" placeholder="Enter your room request">
+        <button type="button" id="room-submit" class="btn btn-warning" onclick="sendRoomJoinReq()">Request Room</button>
+      </div>
+    </form>
+    <button type="button" id="start-game" class="btn btn-warning" onclick="hostStartGame()" disabled>Start Game</button>
+    <p id="users"> users </p>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/res/js/canvas_manager.js" charset="utf-8"></script>
+
+  </body>
 </html>

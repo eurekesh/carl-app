@@ -2,18 +2,101 @@
     <link href="/res/stylesheets/navBar.css" rel="stylesheet">
 
         <title>About Us</title>
+        <style>
+          .memberList{
+            color: #f4f4f4;
+            font-family: 'Lato', sans-serif;
+          }
+          body{
+            background-color: #1a1c20;
+            background-size: 100% 100%;
+          }
+          .block{
+          
+            width: 150px;
+            height: 100px;
+            margin: 100px;
+            /* margin: center; */
+        }
+        .link3{
+            font-family: 'Lato', sans-serif;
+            color: #f4f4f4;
+            font-size: 32px;
+            
+            background-color: #f0a500;
+        }
+        .link4{
+            font-family: 'Lato', sans-serif;
+            color: #f4f4f4;
+            font-size: 28px;
+            
+        }
+        </style>
   </head>
   <body>
-      <%- include('../components/menu') %>
+    <%- include('../components/menu--') %>
       <br><br><br><br>
-    <h1>All about Team C.Ar.L</h1>
-      <p>
-        Let's introduce you to the team!
-      </p>
-      <p>Learn more about Damon by <a href="damon-about-me">clicking me</a></p>
-      <p>Learn more about Alex by <a href="alex-about-me">clicking me</a></p>
-      <p>Learn more about Julia by <a href="julia-about-me">clicking me</a></p>
-      <p>Learn more about Annikka by <a href="annikka-about-me">clicking me</a></p>
-      <p>Learn more about Ash by <a href="ash-about-me">clicking me</a></p>
+      <div class="memberList">
+
+        <h1>All about Team C.Ar.L</h1>
+        <p class="link4">
+          - Scroll to reveal the 5 developers of Carl!
+        </p>
+      </div>
+
+        <div class="container" id="itemWheel">
+          <div class="block" id="bufferBlock">
+            
+          </div>
+          <div class="block" id="bufferBlock">
+            
+          </div>
+          <div class="block" id="bufferBlock">
+            
+          </div>
+          <div class="block" id="bufferBlock">
+            
+          </div>
+          <div class="block">
+            <a class="button rounded link3" href="damon-about-me">Meet Damon!</a>
+            
+          </div>
+          
+          <div class="block">
+            <a class="button rounded link3" href="alex-about-me">Meet Alex!</a>
+            
+          </div>
+          
+          <div class="block">
+            <a class="button rounded link3" href="julia-about-me">Meet Julia!</a>
+            
+          </div>
+          <div class="block">
+            <a class="button rounded link3" href="annikka-about-me">Meet Annikka!</a>
+          </div>
+          <div class="block">
+            <a class="button rounded link3" href="ash-about-me">Meet Ash!</a>
+          </div>
+          <div class="block" id="bufferBlock">
+            
+          </div>
+          
+        </div>
+      
+
+      <script src="https://cdn.jsdelivr.net/npm/horizontal-scroll@1.1.0/dist/index.js"></script>
+      <!-- ^^ is the script that imports the actual horizontal scroll affect XD -->
+      <script>
+          
+          var blocks = document.getElementsByClassName('block');
+          var container = document.getElementsByClassName('container');
+          var hs = new HorizontalScroll.default({
+              blocks : blocks,
+              container: container,
+              isAnimated: true,
+              springEffect: 0.8
+          });
+
+      </script>
   </body>
 </html>

@@ -1,15 +1,33 @@
 body {
   margin: 0px;
-  background: aqua;
+  background: #1A1C20;
+  color: #F4F4F4;
 }
 
-canvas {
+#thisCursor {
   position: fixed;
-  background:white;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+}
+
+#draw-canvas{
+  background: #E0E0E0;
+  position: fixed;
   left: 30%;
   top: 10%;
   user-select: none;
+  z-index: 0;
 }
+
+#cursor-canvas{
+  position: fixed;
+  left: 30%;
+  top: 10%;
+  user-select: none;
+  z-index: 2;
+}
+
 #room-req{
   width: 300px;
 }

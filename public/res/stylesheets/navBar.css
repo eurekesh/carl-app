@@ -1,11 +1,14 @@
 
 /* This css was created by Bootstrap for their login page example */
 
-
+.navbar-custom{
+    box-shadow: 0 8px 6px -6px #999;
+    background-color:#CF7500;
+}
 .link1
 {
     font-family: 'Lato', sans-serif;
-    color:blue;
+    /* color:blue; */
     font-size: 25px;
     margin: 7px;
 }
@@ -13,9 +16,10 @@
 .link2
 {
     font-family: 'Lato', sans-serif;
-    color:black;
+    color: #f4f4f4;
     font-size: 20px;
     margin: 10px;
+    background-color: #1a1c20;
 }
 
 #instrGif{

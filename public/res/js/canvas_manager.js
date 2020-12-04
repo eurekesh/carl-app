@@ -1,40 +1,72 @@
 // base drawing code is from stackoverflow (https://stackoverflow.com/a/30684711) which seems to be originally based on an operadev article (https://dev.opera.com/articles/html5-canvas-painting/)
 // create canvas element and append it to document body
-var canvas = document.getElementById('canvas');
+var cursorCanvas = document.getElementById('cursor-canvas');
+var drawCanvas = document.getElementById('draw-canvas');
 var socket = io(); // connects to socket.io server
 var roomID;
 var first_user = false;
 var req_user = false;
+var gen_color = genColor();
 
+var isHost = false;
+var users = [];
 
-var socID = document.getElementById('socketID');
+var socID;
 var gameID = document.getElementById('gameID');
-const ctx = canvas.getContext('2d'); // we are using a 2d canvas
+const ctx = drawCanvas.getContext('2d'); // we are using a 2d canvas
+const cursorCtx = cursorCanvas.getContext('2d'); // we are using a 2d canvas
+
+//timer vars
+var timeLeft = 30;
+var timer = document.getElementById('timer');
+var timerId;
 
 // last known position
 let pos = { x: 0, y: 0 };
+let cursorPos = { x: 0, y: 0 };
 
 // sets some brush variables // TODO: look into this more for game options later
 ctx.lineWidth = 5;
 ctx.lineCap = 'round';
 
 // add some listeners - UPDATE: only to the canvas, stop tracking coordinates in the middle of nowhere and sending them to the server
-canvas.addEventListener('mousemove', draw);
-canvas.addEventListener('mousedown', setPosition);
-canvas.addEventListener('mouseenter', setPosition);
+cursorCanvas.addEventListener('mousedown', setPosition);
+cursorCanvas.addEventListener('mouseenter', setPosition);
+cursorCanvas.addEventListener('mousemove', updateCursor);
+
+function updateCursor(e){
+  //console.log("cursor position: ", cursorPos);
+  setCursorPosition(e);
+  let cursorInfo = [cursorPos, socID];
+  if(roomID){
+    socket.emit('send cursor', cursorInfo);
+  }
+}
+
+function setCursorPosition(e){
+  cursorPos.x = e.clientX; // - cursorCanvas.offsetLeft;
+  cursorPos.y = e.clientY; // - cursorCanvas.offsetTop;
+}
+
+function renderCursor(cursorData){
+  let cursor = document.getElementById(cursorData[1]);
+  cursor.style.left = cursorData[0].x + 'px';
+  cursor.style.top = cursorData[0].y + 'px';
+}
+
 
 // new position from mouse event
 function setPosition(e) {
-  pos.x = e.clientX - canvas.offsetLeft; // thanks to alex for offsets
-  pos.y = e.clientY - canvas.offsetTop;
+  pos.x = e.clientX - drawCanvas.offsetLeft; // thanks to alex for offsets
+  pos.y = e.clientY - drawCanvas.offsetTop;
 }
 
 function draw(e) { // going to be used for collecting input
-  // must be left click right now
+                   // must be left click right now
   if (e.buttons !== 1) return;
 
   ctx.beginPath(); // begin
-  var gen_color = genColor(); // generates a color
+  // var gen_color = genColor(); // generates a color
 
   var stroke_data = [pos.x,pos.y]; // initial x1,y1
   setPosition(e); // changing coordinates
@@ -65,7 +97,7 @@ function genColor(){ // random hex color
   return "#" + Math.floor(Math.random()*16777215).toString(16);
 }
 function eraseCanvas(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
 }
 function sendData(raw_dat){ // going to emit data
   socket.emit('send data',raw_dat);
@@ -73,6 +105,8 @@ function sendData(raw_dat){ // going to emit data
   //document.getElementById('curr_url').innerHTML = data; // dev only, set
 }
 function sendRoomCreateReq(){
+  isHost = true;
+  document.getElementById('start-game').disabled = false;
   document.getElementById('create-room').disabled = true;
   document.getElementById('room-req').disabled = true;
   document.getElementById('room-submit').disabled = true;
@@ -85,17 +119,60 @@ function sendRoomJoinReq(){
   req_user = true;
 }
 
+function hostStartGame(){
+  socket.emit('host start game');
+}
+
+function startGame(noun){
+  //start timer
+  eraseCanvas();
+  document.getElementById('start-game').disabled = true;
+  document.getElementById('noun').innerHTML = noun;
+  //send timer data with emit
+  console.log("game is about to YEET");
+  cursorCanvas.addEventListener('mousemove', draw);
+  timerId = setInterval(countdown, 1000);
+}
+function endGame(){
+  console.log("We're in the endgame now.");
+  cursorCanvas.removeEventListener('mousemove', draw);
+  timeLeft = 30;
+  document.getElementById('start-game').disabled = false;
+  //send finished canvas to server
+  if(isHost === true){
+    let emit_data = [document.getElementById('noun').innerHTML, drawCanvas.toDataURL()]; // TODO: send noun data and canvas url
+    console.log('sending final data to db')
+    socket.emit('send final canvas', emit_data);
+  }
+
+
+}
+function countdown() {
+  if (timeLeft == -1) {
+    clearTimeout(timerId);
+    endGame();
+  } else {
+    timer.innerHTML = timeLeft;
+    timeLeft--;
+  }
+}
+
+socket.on('cursor_to_client',function(cursorData) {
+  renderCursor(cursorData);
+})
+
 socket.on('to_client',function(data) {
   // console.log('line info and color received from server')
   drawData(data);
 })
 
-socket.on('roots made', function(msg){ // successfully handshake with room handler server side
-  console.log(msg);
+socket.on('roots made', function(id){ // successfully handshake with room handler server side
+  socID = id;
+  console.log(id);
 })
 
 socket.on('create game success', function(data){ // successfully created game
-  socID.innerHTML = data.yourSocketId;
+                                                 //socID.innerHTML = data.yourSocketId;
   gameID.innerHTML = 'Share this code with friends: ' + data.gameID;
   roomID = data.gameID;
   req_user = false;
@@ -127,7 +204,6 @@ socket.on('initial canvas',function(data){ // if the client is new, process the 
 socket.on('successful join',function(data){ // successfully joined!
   console.log('successfully joined a room!');
   const getRoomID = document.getElementById('room-req').value;
-
   gameID.innerHTML = 'Share this code with friends: ' + getRoomID;
   roomID = getRoomID;
   document.getElementById('room-req').disabled = true; // don't let them submit any more rooms
@@ -136,13 +212,88 @@ socket.on('successful join',function(data){ // successfully joined!
 
 })
 
+/* works with only single cursor
+socket.on('new user id', function(id){
+  if(isHost == true){
+    var usersParagraph = document.getElementById('users').innerHTML += "<br>" + id;
+    socket.emit('host added user', usersParagraph);
+  }
+})
+*/
+
+socket.on('new user id', function(id){
+  if(isHost == true){
+    //let usersInfo = [document.getElementById('users').innerHTML += "<br>" + id, id, document.getElementById('cursors').innerHTML];
+    users.push(id);
+    socket.emit('host added user', users);
+  }
+})
+
+socket.on('copy hosts users', function(usersInfo){
+
+  let usersList = "Friends <br>";
+  //alert(usersInfo);
+  for(let i = 0; i < usersInfo.length; i++){
+    usersList += "<br>" + usersInfo[i];
+  }
+  document.getElementById('users').innerHTML = usersList;
+  for(let i = 0; i < usersInfo.length; i++)
+  {
+    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+  }
+  // if(users.length == 0){
+  //   users = usersInfo;
+  //   for(i = 0; i < usersInfo.length; i++){
+  //     document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+  //   }
+  // }
+  //
+  // else{
+  //   for(i = 0; i < usersInfo.length - users.length; i++){
+  //     document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+  //   }
+  // }
+
+//  let usersList = "freinds <br>";
+
+//  for(i = 0; i < usersInfo.length; i++){
+//    usersList += usersInfo[i];
+//  }
+//  usersList += "<br>";
+//  document.getElementById('users').innerHTML = usersList;
+
+
+  /*
+    if(isHost == false){
+      //document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+      if(document.getElementById('cursors').innerHTML == ""){
+        document.getElementById('cursors').insertAdjacentHTML('beforeend', usersInfo[3]);
+      }
+  
+      else{
+        document.getElementById('users').innerHTML = usersInfo[0];
+      }
+    }
+  
+    else{
+      document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+    }
+   */
+})
+
 socket.on('request canvas',function(){ // a new client is joining soon, let's send them our current canvas state
   if(first_user) {
     console.log("a new client is joining, calculating and sending canvas state");
-    let calc_string = canvas.toDataURL();
+    let calc_string = drawCanvas.toDataURL();
     socket.emit('send canvas', calc_string);
   }
   else{
     console.log("a new client is joining, but we aren't the first user so no calculations needed")
   }
+})
+
+
+
+socket.on('start game', function(noun){
+  startGame(noun)
 })

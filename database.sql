@@ -4,13 +4,10 @@
 CREATE DATABASE carl; 
 
 CREATE TABLE canvases (
-    img_64bitcode text, 
-    noun varchar(200), 
+    img_64bitcode text,
+    noun varchar(200),
     time_created text PRIMARY KEY
-    );
-
-
-
+);
 
 --Example insert statement:
 

@@ -33,27 +33,20 @@ var db = pgp(dbConfig);
 
 //get request to display all old canvases in order of date created
 app.get('/past-drawings', function(req, res) {
-  var thecanvases= 'SELECT * FROM canvases ORDER BY date_created;';
-
-  db.task('get-everything', task => {
-    return task.batch([
-      task.any(thecanvases)
-    ]);
-  })
+  var query = 'SELECT * FROM canvases ORDER BY time_created;';
+  db.query(query)
       .then(data => {
         res.render('past-drawings' , {
           my_title: "Past Drawings",
           allcanvases: data[0]
-
         })
       })
       .catch(err => {
-        console.log('error', err);
-        res.render('past-drawings', {
-          my_title: "Past Drawings",
-          allcanvases: ''
-        })
-      });
+        console.log(err);
+      })
+      .finally(() => {
+        db.end();
+      })
 });
 
 app.get("/", function (req, res) {
@@ -68,12 +61,6 @@ app.get("/res/:folder/:filen", function (req, res) { // yikes this took a long t
   res.sendFile(__dirname + '/public/res/' + req.params.folder + '/' + req.params.filen);
 
 });
-
-
-
-
-
-
 
 app.get("/:req_page/", function (req, res) { // yikes this took a long time
   //res.sendFile(__dirname +'/public/about-me-pages/about-us.ejs')
@@ -113,4 +100,17 @@ app.get("/about-me-pages/:req_page", function (req, res) { // yikes this took a 
 io.on('connection', (socket) => {
   console.log('user connected: ' + socket.id);
   yggdrasil.createYggdrasil(io,socket);
+  io.on('send final canvas',function(data) {
+    let query = "INSERT INTO canvases VALUES('" + data[1] + "', '" + data[0] + "', CURRENT_TIMESTAMP);";
+    db.query(query)
+        .then(res => {
+          console.log("Canvas submitted to db successfully");
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => {
+          db.end();
+        })
+  })
 });

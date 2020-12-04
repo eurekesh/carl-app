@@ -2,7 +2,7 @@
 /* This css was created by Bootstrap for their login page example */
 
 .navbar-custom{
-    
+    box-shadow: 0 8px 6px -6px #999;
     background-color:#CF7500;
 }
 .link1

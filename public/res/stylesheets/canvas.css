@@ -1,6 +1,7 @@
 body {
   margin: 0px;
-  background: aqua;
+  background: #1A1C20;
+  color: #F4F4F4;
 }
 
 #thisCursor {
@@ -11,7 +12,7 @@ body {
 }
 
 #draw-canvas{
-  background: white;
+  background: #E0E0E0;
   position: fixed;
   left: 30%;
   top: 10%;

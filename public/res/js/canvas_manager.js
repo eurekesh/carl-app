@@ -224,12 +224,25 @@ socket.on('new user id', function(id){
 socket.on('new user id', function(id){
   if(isHost == true){
     //let usersInfo = [document.getElementById('users').innerHTML += "<br>" + id, id, document.getElementById('cursors').innerHTML];
-    users += id;
+    users.push(id);
     socket.emit('host added user', users);
   }
 })
 
 socket.on('copy hosts users', function(usersInfo){
+  if(users.length == 0){
+    users = usersInfo;
+    for(i = 0; i < usersInfo.length; i++){
+      document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+    }
+  }
+
+  else{
+    for(i = 0; i < usersInfo.length - users.length; i++){ 
+      document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[i] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+    }
+  }
+
 //  let usersList = "freinds <br>";
 
 //  for(i = 0; i < usersInfo.length; i++){

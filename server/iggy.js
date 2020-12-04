@@ -40,14 +40,14 @@ function findRoom(id){ // given a room id (6 chars that define the room), find i
 
 function processCursor(cursorLocation){
     let currentRoom = this.rooms[Object.keys(this.rooms)[0]]; // ugh. thanks so
-    console.log("Current room: ", currentRoom, "cursorLocation: ", cursorLocation);
+    //console.log("Current room: ", currentRoom, "cursorLocation: ", cursorLocation);
     io.to(currentRoom).emit('cursor_to_client', cursorLocation);
 }
 
 function extractData(canvas_string){ // we request a canvas from the host to give to new users, here's what we do with it
-    console.log("canvas string updated: " + canvas_string.substr(0,50));
+    //console.log("canvas string updated: " + canvas_string.substr(0,50));
     let currentRoom = this.rooms[Object.keys(this.rooms)[0]];
-    console.log(currentRoom);
+   // console.log(currentRoom);
     io.to(currentRoom).emit('initial canvas',canvas_string); // we emit to the room that was waiting
 }
 

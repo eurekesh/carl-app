@@ -9,6 +9,7 @@ var req_user = false;
 var gen_color = genColor();
 
 var isHost = false;
+var users = [];
 
 var socID;
 var gameID = document.getElementById('gameID');
@@ -222,21 +223,37 @@ socket.on('new user id', function(id){
 
 socket.on('new user id', function(id){
   if(isHost == true){
-    let usersInfo = [document.getElementById('users').innerHTML += "<br>" + id, id];
-    socket.emit('host added user', usersInfo);
+    //let usersInfo = [document.getElementById('users').innerHTML += "<br>" + id, id, document.getElementById('cursors').innerHTML];
+    users += id;
+    socket.emit('host added user', users);
   }
-
 })
 
 socket.on('copy hosts users', function(usersInfo){
+//  let usersList = "freinds <br>";
+
+//  for(i = 0; i < usersInfo.length; i++){
+//    usersList += usersInfo[i];
+//  }
+//  usersList += "<br>";
+//  document.getElementById('users').innerHTML = usersList;
+
+/*
   if(isHost == false){
-    document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
-    document.getElementById('users').innerHTML = usersInfo[0];
+    //document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
+    if(document.getElementById('cursors').innerHTML == ""){
+      document.getElementById('cursors').insertAdjacentHTML('beforeend', usersInfo[3]);
+    }
+
+    else{
+      document.getElementById('users').innerHTML = usersInfo[0];
+    }
   }
 
   else{
     document.getElementById('cursors').insertAdjacentHTML('beforeend', "<img id = "+ "'" + usersInfo[1] + "'" + "src='pencil.png' style = 'position: fixed; top: 0px; left: 0px; z-index: 1;'>");
   }
+ */
 })
 
 socket.on('request canvas',function(){ // a new client is joining soon, let's send them our current canvas state

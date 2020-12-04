@@ -33,7 +33,7 @@ var db = pgp(dbConfig);
 
 //get request to display all old canvases in order of date created
 app.get('/past-drawings', function(req, res) {
-  var query = 'SELECT * FROM canvases ORDER BY time_created;';
+  var query = 'SELECT * FROM canvases ORDER BY time_created DESC LIMIT 300;';
   db.query(query)
       .then(data => {
         res.render('past-drawings' , {

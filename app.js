@@ -26,7 +26,7 @@ serv.listen(port,()=> {
 app.set('views', [__dirname+'/public/views/pages', __dirname+'/public/views/about-me-pages']); // ejs looks for "views"
 
 app.set('view engine', 'ejs')
-app.use(express.static(__dirname+ "public/"))
+app.use(express.static(path.join(__dirname,"public")))
 
 app.get('/past-drawings', function(req, res) {
   const db_query = 'SELECT * FROM canvases ORDER BY date_created;';

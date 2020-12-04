@@ -1,21 +1,81 @@
 <%- include('../components/head') %>
             <title>Instructions</title>
       <link href="/res/stylesheets/navBar.css" rel="stylesheet">
+      <style>
+
+        html, body{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            margin: 0;
+        }
+        h1 {
+            margin: 50px;
+            font-family: Helvetica;
+        }
+
+        .block{
+            width: 400px;
+            height: 200px;
+            margin: 250px;
+            margin-left: center;
+        }
+
+        .container{
+            margin-top: 50px;
+            margin-right: 0px;
+        }
+    
+    </style>
+    <style>
+        body {
+            /* background-image: url('images/pencils.jpg');
+            background-repeat: no-repeat; */
+            background-color: #1a1c20;
+            background-size: 100% 100%;
+        }
+    </style>
   </head>
     <body>
     <%- include('../components/menu') %>
+    
+    <div class="container" id="itemWheel">
 
-          <div class="container">
-              <a href="http://www.youtube.com">
-                  <img id="instrGif" alt="instructionalGif" src="instructionalGif.png">
-              </a>
-              <p>Click the following link to access an experimental demo <a href="canvas">this link</a></p>
-              <form id="inputForm">
-                    <label for="w3review">TEXT BOX:</label>
-                    <textarea id="w3review" name="w3review" rows="5" cols="50">A text area that we will hopefully transition into sending images.  Also our instructions will go here
-                    </textarea>
-                  <button type="button" class="btn btn-primary" onclick="stingo(id)">Submit</button>
-              </form>
-          </div>
+        <div class="block">
+            <img class="rounded" src="images/welcomeCarlOrange.JPG" height="500" width="812">
+        </div>
+        
+        <div class="block">
+            <img class="rounded" src="images/whatCarlO.JPG" height="500" width="812">
+        </div>
+        
+        <div class="block">
+            <img class="rounded" src="images/step1O.JPG" height="500" width="812">
+        </div>
+        <div class="block">
+            <img class="rounded" src="images/step2Orange.JPG" height="500" width="812">
+        </div>
+        <div class="block" id="bufferBlock">
+            <img src="" height="500" width="812">
+        </div>
+   
+    </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/horizontal-scroll@1.1.0/dist/index.js"></script>
+        <!-- ^^ is the script that imports the actual horizontal scroll affect XD -->
+        <script>
+            
+            var blocks = document.getElementsByClassName('block');
+            var container = document.getElementsByClassName('container');
+            var hs = new HorizontalScroll.default({
+                blocks : blocks,
+                container: container,
+                isAnimated: true,
+                springEffect: 0.8
+            });
+
+        </script>
     </body>
 </html>

@@ -1,45 +1,4 @@
-<<<<<<< HEAD
-<%- include('../components/head') %>
-    <title>Highly Experimental Test Canvas</title>
-    <link rel="stylesheet" href="/res/stylesheets/canvas.css">
-<link rel="stylesheet" href="/res/stylesheets/navBar.css">
-  </head>
-  <body>
-  <%- include('../components/menu') %>
-    <canvas id="canvas" height="700" width="700"></canvas>
-  <!-- NOTE: canvas can ONLY be modified using these height and width values. PLEASE don't try to use CSS. don't trust me?
-                trust the cow:
-                ____________________________________
-               / please don't use css to modify the \
-               \ canvas                             /
-                ___________________________________
-                       \   ^__^
-                        \  (oo)\_______
-                           (__)\       )\/\
-                               ||____w |
-                               ||     ||
--->
-  <br>
-  <br>
-  <br>
-  <br>
-    <p id="socketID"></p>
-    <p id="gameID">You are in the lobby, feel free to draw and then enter a room ID <br>when you're ready to play with friends!</p>
-  <button type="button" id="create-room" class="btn btn-primary" onclick="sendRoomCreateReq()">Create Room</button>
-  <form>
-    <div class="form-group">
-      <label for="room-request">Enter your room request</label>
-      <input type="text" aria-label="stuff" class="form-control" id="room-req" placeholder="Enter your room request">
-      <button type="button" id="room-submit" class="btn btn-primary" onclick="sendRoomJoinReq()">Request Room</button>
-    </div>
-  </form>
-  <button type="button" id="create-room" class="btn btn-primary" onclick="erase()">Erase Board</button>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/res/js/canvas_manager.js" charset="utf-8"></script>
-  </body>
 
-</html>
-=======
 <%- include('../components/head') %>
     <title>Highly Experimental Test Canvas</title>
     <link rel="stylesheet" href="/res/stylesheets/canvas.css">
@@ -87,4 +46,3 @@
   </body>
 
 </html>
->>>>>>> origin/staging

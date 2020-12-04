@@ -23,7 +23,9 @@
                   var imgs = '';
                   allcanvases.forEach(function(item){
                     var imgsrc= item.img_64bitcode;
-                    imgs += '<img id = "canvas_img" src="' + imgsrc + '" alt="a past canvas" style="width:350px;height:350px;" />'
+                    imgs += '<div class="card" style="width: 19rem;display:inline-block;">' +
+                            '<img class="card-img-top" src="' + imgsrc + '" alt="a past canvas" style="width:350px;height:350px;" /></div>'
+
                   }); %>
         <%- imgs %>
         <% } %>

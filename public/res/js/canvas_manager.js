@@ -151,7 +151,7 @@ function countdown() {
     clearTimeout(timerId);
     endGame();
   } else {
-    timer.innerHTML = timeLeft + ' seconds remaining';
+    timer.innerHTML = timeLeft;
     timeLeft--;
   }
 }

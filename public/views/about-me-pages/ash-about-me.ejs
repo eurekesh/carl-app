@@ -1,27 +1,49 @@
 <%- include('../components/head') %>
-<link href="/res/stylesheets/navBar.css" rel="stylesheet">
+		<link href="/res/stylesheets/navBar.css" rel="stylesheet">
+		<!-- <link href="/res/stylesheets/myStyle.css" rel="stylesheet"> -->
+		<title>
+			Ash
+		</title>
+		<style>
+			body{
+				background-color: #1a1c20;
+				background-size: 100% 100%;
+				font-family: 'Lato', sans-serif;
+			}
+			.container{
+				color: #f4f4f4;
+				font-family: 'Lato', sans-serif;
+			}
+			.banner1{
+				background-color: #f0a500;
+				color: #1a1c20;
 
-<title>
-  About Ash
-</title>
+			}
+			
+		</style>
+	</head>
 
-</head>
+	<body>
+		<%- include('../components/menu--') %>
+		  <br><br><br><br>
 
-<body>
-    <%- include('../components/menu--') %>
-<br><br><br><br>
-        <br><br><br><br>
-      <h1>About Ash</h1>
-        <a href = "about-us.ejs"> Home </a>
-        <hr>
-	      <img src = "ash-pic.jpg" alt="img1" height = "300">
-        <h2>About Me:</h2>
-        <p>Hello There! My name is Ash, and I'm 19 hailing from Dallas, Texas.</p>
-        <p>I love all things technology and am an avid tennis player.</p>
-        <p>I greatly enjoy C++ and am looking forward to this foray into web dev!</p>
-        <h2>Education: </h2>
-        <p>I graduated from Bishop Lynch, and am now pursuing a degree in CS and CTD!</p>
-	<p>If you happen to have any open internships, you know who to call.. </p>
+		  <div class="container pt-3">
 
-    </body>
+			<h1>Ash Duy
+				<small class ="text-muted"> - Software Development Methods and Tools</small>
+			</h1>
+			<div class="card banner1">
+				<p class="card-body">About Me: 
+          Hello There! My name is Ash, and I'm 19 hailing from Dallas, Texas. 
+          I love all things technology and am an avid tennis player. I greatly enjoy C++ and am looking forward to this foray into web dev! 
+          Education: 
+          I graduated from Bishop Lynch, and am now pursuing a degree in CS and CTD! If you happen to have any open internships, you know who to call..
+				</p>
+            </div>
+            <br>
+			<img class ="rounded-circle" src ="ash-pic.jpg" alt="Senior Portrait" height = "450" width ="550" >
+			<br>    
+		</div>
+
+	</body>
 </html>

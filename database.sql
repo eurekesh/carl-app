@@ -4,20 +4,10 @@
 CREATE DATABASE carl; 
 
 CREATE TABLE canvases (
-    canvasID int NOT NULL PRIMARY KEY,
     img_64bitcode text,
-    group_name varchar(200),
-    assigned_noun varchar(200),
-    date_created date,
-    ratings int[]
+    noun varchar(200),
+    time_created text PRIMARY KEY
 );
-
-CREATE TABLE userInfo (
-    group_name varchar(200),
-    player_names text[]
-);
-
-
 
 --Example insert statement:
 
